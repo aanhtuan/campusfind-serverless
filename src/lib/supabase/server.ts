@@ -4,17 +4,16 @@ import { createServerClient, type CookieMethodsServer } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { getPublicSupabaseConfig } from "./config";
 
-// Create per request. A response-aware adapter is required for auth operations;
-// it must propagate both cookies AND the SSR library's cache headers.
+// A new client for each render/request. Proxy refreshes before Server Components.
+// Mutations must use a response-aware adapter (response-client.ts), never this
+// default read-only render adapter. Server Components cannot set response cookies.
 export async function createClient(responseCookies?: CookieMethodsServer) {
   const { url, publishableKey } = getPublicSupabaseConfig();
   const cookieStore = await cookies();
   return createServerClient(url, publishableKey, {
     cookies: responseCookies ?? {
       getAll: () => cookieStore.getAll(),
-      setAll: () => {
-        throw new Error("Session cookie writes require a response-aware adapter. Session refresh and auth handlers are implemented in Task 03B.");
-      },
+      setAll: () => { /* Proxy owns persisted cookie refresh during rendering. */ },
     },
   });
 }

@@ -1,7 +1,7 @@
 # CampusFind
 
 A serverless lost and found management system for university campuses.
-Task 01 provides the application foundation; Task 02B adds locally verified database migrations and RLS. Task 03A prepares Supabase Cloud development clients and validation. Business workflows and deployment remain pending.
+Task 01 provides the application foundation; Task 02B adds locally verified database migrations and RLS. Task 03A connects the Cloud development foundation. Task 03B-1 adds SSR authentication infrastructure and protected route shells. Business workflows and deployment remain pending.
 
 ## Stack
 
@@ -100,4 +100,39 @@ Hosted migrations require explicit approval after reviewing the target and dry-r
 
 ## Next task
 
-Task 03B — Authentication & Session Management: implement verified identity, response-aware cookies/cache headers, session refresh, sign-in/sign-out and protected routes. Cloud configuration and migration validation must be completed first. See [MVP scope](docs/project-scope.md).
+Complete Task 03B authentication acceptance: finish the outstanding hosted tests documented in the final review before final acceptance or business modules. The [authentication foundation](docs/authentication-foundation.md) documents the current helpers, proxy, configuration and limitations. See [MVP scope](docs/project-scope.md).
+
+## Authentication foundation
+
+Set `NEXT_PUBLIC_SITE_URL` in ignored `.env.local` to the trusted application origin (local development: `http://localhost:3000`). Restart/rebuild after public env changes. Auth redirects and email links use this configuration rather than request Host headers.
+
+```sh
+npm run test:auth
+# Optional local production HTTP smoke test (separate terminal):
+npm run build
+npm run start -- --port 3100
+# Another terminal; localhost only:
+npm run test:auth-routes -- http://127.0.0.1:3100
+```
+
+Login, registration, email verification and logout UI are implemented. The protected business pages remain placeholders. Hosted Auth settings/templates require separate approval. See [authentication design and email setup](docs/authentication-foundation.md).
+
+Authentication UI is available at `/login`, `/register` and `/verify-email`;
+`/dashboard` requires a verified Supabase session and reads the user's own profile.
+See [Authentication UI review](docs/authentication-ui.md) for setup, current Cloud
+redirect requirements, test results and the approval gate for hosted test accounts.
+See [Task 03B-3 final review](docs/task03b3-final-review.md) for current hosted evidence and tests still NOT RUN. Local tests are not hosted proof.
+
+
+For read-only development Cloud checks (public key only):
+
+```sh
+npm run test:auth-public-cloud -- gxbpprhivyxmtcqibncf
+```
+
+With `npm run dev`, an existing authenticated development user can visit
+`/auth/validation` and run the explicit refresh, own-profile, protected-column
+permission and concurrent-request checks. Column probes use an impossible
+`id IS NULL` filter and never match a row. The page is unavailable in production.
+It does not test cross-user RLS or naturally expired sessions. Never paste
+passwords, JWTs or secret keys into reports or commit `.env.local`.
