@@ -23,7 +23,8 @@ enabled = false
 sql_paths = []
 
 [studio]
-enabled = false
+enabled = true
+port = 54323
 
 [local_smtp]
 enabled = false
