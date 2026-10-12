@@ -6,6 +6,9 @@
   --foreground: #172e28;
   --primary: #1e5546;
   --primary-foreground: #ffffff;
+  --muted: #f0f2ee;
+  --muted-foreground: #52665d;
+  --destructive: #a12d25;
   --ring: #347a65;
   --radius: 0.75rem;
 }
@@ -15,6 +18,9 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
   --color-ring: var(--ring);
   --font-sans: Arial, Helvetica, sans-serif;
   --radius-md: var(--radius);
