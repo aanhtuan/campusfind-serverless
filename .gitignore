@@ -147,3 +147,9 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Local hosting configuration and private keys
+.vercel/
+*.pem
+*.key
+.DS_Store
