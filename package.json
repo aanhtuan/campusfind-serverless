@@ -7,9 +7,12 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:supabase-config": "node --experimental-strip-types --test tests/supabase-config.test.mjs",
+    "check:supabase-cloud": "node --experimental-strip-types scripts/check-supabase-cloud.mjs"
   },
   "dependencies": {
+    "@next/env": "16.4.0",
     "@radix-ui/react-slot": "^1.5.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",

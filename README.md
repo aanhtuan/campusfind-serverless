@@ -1,8 +1,7 @@
 # CampusFind
 
 A serverless lost and found management system for university campuses.
-Task 01 establishes the application foundation and a responsive landing page.
-Business features, database migrations, Supabase connections, and deployment are deferred.
+Task 01 provides the application foundation; Task 02B adds locally verified database migrations and RLS. Task 03A prepares Supabase Cloud development clients and validation. Business workflows and deployment remain pending.
 
 ## Stack
 
@@ -23,13 +22,13 @@ npm run dev
 
 Open http://localhost:3000. The landing page runs without environment variables or a live Supabase project.
 
-When starting Supabase integration, copy the example:
+For Supabase development, copy the example:
 
 ```sh
 cp .env.example .env.local
 ```
 
-Replace `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with your project's public configuration. The example contains placeholders only. These variables are browser-visible; never place a secret key, service-role key, password, or token in them. `.env.local` is ignored by Git. No Supabase client is created during Task 01.
+Replace `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` with your project's public configuration. The example contains placeholders only. These variables are browser-visible; never place a secret key, service-role key, password, or token in them. `.env.local` is ignored by Git. Browser/server clients now validate configuration when called. Use a modern `sb_publishable_...` key. Full Cloud setup, CLI linking and the hosted migration approval gate are documented in [Supabase Cloud setup](docs/supabase-cloud-setup.md).
 
 ## Checks and production preview
 
@@ -55,7 +54,7 @@ src/
   app/             App Router pages, root layout, and global styles
   components/ui/   Reusable UI primitives
   features/        Future auth, items, and claims modules
-  lib/             Shared utilities and future Supabase infrastructure
+  lib/             Shared utilities and Supabase client infrastructure
   types/           Future cross-module contracts and generated database types
 docs/
   project-scope.md  MVP modules, boundaries, and acceptance criteria
@@ -70,22 +69,35 @@ Use `@/*` to import from `src/*`. Keep domain code in its feature and promote co
 - `chore/project-foundation`: this foundation, branched from `develop`.
 - Existing `feature/auth`, `feature/reporting`, `feature/search`, and `feature/claims` branches are preserved. Reporting and search belong to one MVP module.
 
-Start future work from an up-to-date `develop` on a dedicated branch:
+Use conventional prefixes `feat/`, `fix/`, `chore/`, `refactor/`, `test/` or `docs/` for future tasks.
+
+`develop` has not yet been synchronized with the merged foundation. Until synchronization is explicitly approved, start dedicated work from the latest `origin/main`. Implement locally, show the full diff in VS Code, and obtain separate approval before commit, push, PR or merge:
 
 ```sh
 git fetch origin
-git switch -c feature/your-task origin/develop
+git switch -c chore/your-task origin/main
 # Make and validate the changes.
 npm run lint
 npm run typecheck
 npm run build
+# Only after explicit approval to commit/push:
 git add <reviewed-files>
 git commit -m "feat: describe your change"
-git push -u origin feature/your-task
+git push -u origin chore/your-task
 ```
 
-Open a pull request into `develop`, review the diff and checks, and merge only after explicit review/approval. Avoid force pushes and do not reset shared history. Never commit credentials or generated build output. Dependency versions are locked in `package-lock.json`; use `npm ci` for reproducible installs.
+Select the agreed PR target after branch synchronization; create a PR and merge only after explicit approval. Avoid force pushes and do not reset shared history. Never commit credentials or generated build output. Dependency versions are locked in `package-lock.json`; use `npm ci` for reproducible installs.
+
+## Supabase development validation
+
+```sh
+npm run test:supabase-config
+# After configuring the confirmed Cloud development project:
+npm run check:supabase-cloud -- --confirm-development-project
+```
+
+Hosted migrations require explicit approval after reviewing the target and dry-run. No automatic Cloud setup, database reset or production mutation occurs. See [Cloud setup and troubleshooting](docs/supabase-cloud-setup.md) and [database security review](docs/security-review-task02b.md).
 
 ## Next task
 
-Implement the Accounts & Access module: agree on identity and role requirements, then add Supabase browser/server clients, session handling, sign-in/sign-out, and protected routes. Design database authorization and verify it separately before enabling data workflows. See [MVP scope](docs/project-scope.md).
+Task 03B — Authentication & Session Management: implement verified identity, response-aware cookies/cache headers, session refresh, sign-in/sign-out and protected routes. Cloud configuration and migration validation must be completed first. See [MVP scope](docs/project-scope.md).
