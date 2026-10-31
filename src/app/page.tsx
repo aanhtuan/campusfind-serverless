@@ -16,7 +16,8 @@ export default function Home() {
         <Link href="/" aria-label="CampusFind home" className="flex items-center gap-2 text-xl font-bold tracking-tight">
           <span className="rounded-full bg-primary p-2 text-white"><MapPin aria-hidden="true" className="size-5" /></span>CampusFind<span className="text-primary">.</span>
         </Link>
-        <nav aria-label="Main navigation" className="flex items-center gap-6 text-sm font-medium">
+        <nav aria-label="Main navigation" className="flex flex-wrap items-center gap-4 text-sm font-medium sm:gap-6">
+          <Link href="/items" className="inline-flex min-h-11 items-center rounded-sm hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Browse items</Link>
           <a href="#how-it-works" className="rounded-sm hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">How it works</a>
           <a href="#our-community" className="rounded-sm hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Our community</a>
         </nav>
