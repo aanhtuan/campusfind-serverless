@@ -11,6 +11,7 @@
     "test:supabase-config": "node --experimental-strip-types --test tests/supabase-config.test.mjs",
     "check:supabase-cloud": "node --experimental-strip-types scripts/check-supabase-cloud.mjs",
     "test:auth": "node --test tests/auth-foundation.test.mjs",
+    "test:reports": "node --test tests/reports.test.mjs",
     "test:auth-routes": "node tests/auth-routes-smoke.mjs",
     "test:auth-public-cloud": "node --experimental-strip-types tests/auth-public-cloud.mjs"
   },
