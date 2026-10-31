@@ -23,9 +23,9 @@ for (const path of ['/', '/login']) {
   console.log(`PASS: local ${path} accessible`);
 }
 const browse = await read('/items');
-assert.ok([200, 404].includes(browse.status)); // Browsing UI is not implemented.
+assert.equal(browse.status, 200); // Search & Discovery is integrated on main.
 assert.equal(browse.headers.get('location'), null);
-console.log('PASS: /items is not auth-redirected (browsing UI remains unimplemented)');
+console.log('PASS: public /items is accessible without an auth redirect');
 for (const path of ['/auth/confirm?token_hash=short&type=recovery', '/auth/callback?code=short']) {
   const response = await read(path);
   assert.equal(response.status, 303);
@@ -45,6 +45,16 @@ for (const [path, heading] of [['/login', 'Welcome back'], ['/register', 'Create
   assert.ok(html.includes(heading));
   assert.ok(!/href="https:\/\/external\.example/.test(html));
   assert.ok(html.includes('next=%2Fdashboard'));
+  // Fetch observes the pre-hydration HTML. A blocked JS bundle must never
+  // allow a native GET form submission containing credentials in the URL.
+  assert.match(html, /<form\b[^>]*method="post"/i);
+  assert.match(html, /<button\b(?=[^>]*type="submit")(?=[^>]*disabled)[^>]*>/i);
+  assert.match(html, /<input\b(?=[^>]*name="email")(?=[^>]*disabled)[^>]*>/i);
+  const fields = path === '/register' ? ['displayName', 'email', 'password', 'confirmPassword'] : path === '/login' ? ['email', 'password'] : ['email'];
+  for (const field of fields) {
+    assert.match(html, new RegExp(`<input\\b(?=[^>]*name="${field}")(?=[^>]*disabled)[^>]*>`, 'i'), `${path}: ${field} must be disabled without hydration`);
+  }
+  assert.doesNotMatch(html, /\bformmethod\s*=\s*["']?get\b/i, 'No submit control may override the POST fallback with GET');
   console.log(`PASS: ${path} renders anonymous UI with safe links and no-store cache headers`);
 }
 console.log('NOT RUN: hosted Auth/session/email HTTP flows; these localhost GET requests have no Auth session');
