@@ -1,23 +1,109 @@
 import Link from "next/link";
+import { ArrowLeft, Calendar, Edit3, MapPin, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { requireOwnedReport } from "@/features/reports/queries";
-import { ReportShell, StatusBadge } from "@/features/reports/report-ui";
+import { ReportShell } from "@/features/reports/report-ui";
 import { PhotoManager } from "@/features/reports/photo-manager";
 import { photoFields, type ItemPhoto } from "@/features/reports/types";
+import { TypeBadge, StatusBadge } from "@/components/ui/badge";
 
 export const dynamic = "force-dynamic";
+
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const { user, client, report } = await requireOwnedReport(id, `/my-reports/${id}`);
-  const { data: photos, error } = await client.from("item_images").select(photoFields).eq("item_id", report.id).order("image_slot");
+  const { data: photos, error } = await client
+    .from("item_images")
+    .select(photoFields)
+    .eq("item_id", report.id)
+    .order("image_slot");
+
   if (error) throw new Error("Unable to load report photos.");
-  return <ReportShell title="Manage your report" subtitle="Update the details and photos for your campus report.">
-    <article className="rounded-xl border border-primary/15 bg-white p-5 sm:p-7">
-      <div className="flex flex-wrap items-center gap-3"><span className="text-sm font-bold text-primary">{report.type}</span><StatusBadge status={report.status} /></div>
-      <h2 className="mt-4 text-2xl font-semibold [overflow-wrap:anywhere]">{report.title}</h2>
-      <dl className="mt-6 grid gap-5 sm:grid-cols-3"><div><dt className="text-sm text-muted-foreground">Category</dt><dd className="break-words font-medium">{report.category}</dd></div><div><dt className="text-sm text-muted-foreground">Campus location</dt><dd className="break-words font-medium">{report.location}</dd></div><div><dt className="text-sm text-muted-foreground">{report.type === "LOST" ? "Lost on" : "Found on"}</dt><dd className="font-medium"><time dateTime={report.event_date}>{report.event_date}</time></dd></div></dl>
-      <h3 className="mt-6 font-medium">Description</h3><p className="mt-2 whitespace-pre-wrap [overflow-wrap:anywhere] text-muted-foreground">{report.description || "No description provided."}</p>
-      <Button asChild variant="outline" className="mt-6"><Link href={`/my-reports/${report.id}/edit`}>Edit report details</Link></Button>
-    </article><PhotoManager itemId={report.id} ownerId={user.id} photos={(photos ?? []) as ItemPhoto[]} />
-  </ReportShell>;
+
+  const isLost = report.type === "LOST";
+
+  return (
+    <ReportShell
+      title="Chi tiết & Quản lý tin báo"
+      subtitle="Cập nhật nội dung mô tả hoặc quản lý ảnh đính kèm cho tin báo của bạn."
+    >
+      <div className="mb-6">
+        <Link
+          href="/my-reports"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+        >
+          <ArrowLeft className="size-3.5" />
+          <span>Quay lại danh sách của tôi</span>
+        </Link>
+      </div>
+
+      <article className="rounded-3xl border-2 border-border/80 bg-card p-6 shadow-[4px_4px_0px_0px_rgba(17,24,39,0.06)] sm:p-8">
+        {/* Badges */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4">
+          <div className="flex items-center gap-2">
+            <TypeBadge type={report.type} />
+            <StatusBadge status={report.status} />
+          </div>
+          <span className="text-xs text-muted-foreground">Mã tin: #{report.id.slice(0, 8)}</span>
+        </div>
+
+        {/* Title */}
+        <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl [overflow-wrap:anywhere]">
+          {report.title}
+        </h2>
+
+        {/* Meta Grid */}
+        <dl className="mt-6 grid gap-4 rounded-2xl bg-secondary/40 p-4 sm:grid-cols-3 sm:p-5">
+          <div>
+            <dt className="text-xs font-semibold text-muted-foreground uppercase flex items-center gap-1.5">
+              <Tag className="size-3 text-primary" />
+              <span>Danh mục</span>
+            </dt>
+            <dd className="mt-1 font-bold text-foreground break-words">{report.category}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold text-muted-foreground uppercase flex items-center gap-1.5">
+              <MapPin className="size-3 text-amber-700" />
+              <span>Khu vực trên campus</span>
+            </dt>
+            <dd className="mt-1 font-bold text-foreground break-words">{report.location}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold text-muted-foreground uppercase flex items-center gap-1.5">
+              <Calendar className="size-3 text-emerald-700" />
+              <span>{isLost ? "Ngày làm mất" : "Ngày nhặt được"}</span>
+            </dt>
+            <dd className="mt-1 font-bold text-foreground">
+              <time dateTime={report.event_date}>{report.event_date}</time>
+            </dd>
+          </div>
+        </dl>
+
+        {/* Description */}
+        <div className="mt-6">
+          <h3 className="text-xs font-bold text-foreground uppercase tracking-wider">
+            Mô tả chi tiết
+          </h3>
+          <div className="mt-2 rounded-2xl border border-border/60 bg-muted/30 p-4">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-foreground/90 [overflow-wrap:anywhere]">
+              {report.description || "Không có mô tả chi tiết."}
+            </p>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="mt-6 border-t border-border/60 pt-5">
+          <Button asChild variant="outline" className="gap-2">
+            <Link href={`/my-reports/${report.id}/edit`}>
+              <Edit3 className="size-4" />
+              <span>Chỉnh sửa thông tin tin báo</span>
+            </Link>
+          </Button>
+        </div>
+      </article>
+
+      {/* Photo Manager Component */}
+      <PhotoManager itemId={report.id} ownerId={user.id} photos={(photos ?? []) as ItemPhoto[]} />
+    </ReportShell>
+  );
 }

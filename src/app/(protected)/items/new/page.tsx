@@ -6,5 +6,12 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   await requireUser("/items/new");
-  return <ReportShell title="Report an item" subtitle="Lost something or found something on campus? Start with the details. Photos are optional after saving."><ReportForm /></ReportShell>;
+  return (
+    <ReportShell
+      title="Báo mất hoặc nhặt được đồ"
+      subtitle="Bạn vừa để quên đồ hay nhặt được tài sản trong trường? Hãy điền thông tin bên dưới để cộng đồng cùng hỗ trợ."
+    >
+      <ReportForm />
+    </ReportShell>
+  );
 }

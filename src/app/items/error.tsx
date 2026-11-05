@@ -1,7 +1,30 @@
 "use client";
+
 import Link from "next/link";
+import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ErrorPage({ reset }: { reset: () => void }) {
-  return <main className="mx-auto max-w-3xl px-4 py-12"><h1 className="text-2xl font-semibold">Items could not be loaded</h1><p role="alert" className="mt-4 text-muted-foreground">Please check your connection and try again. Your search has not changed.</p><div className="mt-6 flex flex-wrap gap-3"><Button onClick={reset}>Try again</Button><Button asChild variant="outline"><Link href="/items">Clear search</Link></Button></div></main>;
+  return (
+    <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 py-16 text-center">
+      <div className="flex size-16 items-center justify-center rounded-3xl bg-amber-100 text-amber-800">
+        <AlertTriangle className="size-8" />
+      </div>
+      <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+        Không thể tải danh sách đồ vật
+      </h1>
+      <p role="alert" className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+        Vui lòng kiểm tra lại đường truyền kết nối mạng và thử lại. Bộ lọc tìm kiếm của bạn vẫn được giữ nguyên.
+      </p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <Button onClick={reset} size="default" className="gap-2 rounded-xl">
+          <RotateCcw className="size-4" />
+          <span>Thử lại</span>
+        </Button>
+        <Button asChild variant="outline" size="default" className="rounded-xl">
+          <Link href="/items">Xóa tìm kiếm</Link>
+        </Button>
+      </div>
+    </main>
+  );
 }

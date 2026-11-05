@@ -83,12 +83,101 @@ export function PhotoManager({ itemId, ownerId, photos }: { itemId: string; owne
       setMessage(result.ok ? "Photo operation confirmed." : result.message);
     });
   }
-  return <section aria-labelledby="photos-heading" className="mt-8 rounded-xl border border-primary/15 bg-white p-5 sm:p-7">
-    <h2 id="photos-heading" className="text-xl font-semibold">Report photos <span className="text-base font-normal text-muted-foreground">({photos.length}/3)</span></h2>
-    <p className="mt-2 text-sm text-muted-foreground">Optional: JPEG, PNG or WebP, up to 5 MiB each. Photos on active reports can be viewed by other signed-in members. Do not upload confidential evidence or unredacted identity documents.</p>
-    {photos.length ? <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{photos.map((photo, index) => <div key={photo.id} className="min-w-0"><PrivatePhoto photo={photo} number={index + 1} /><Button type="button" variant="outline" disabled={busy || pending.length > 0} onClick={() => void remove(photo)} aria-label={`Remove report photo ${index + 1}`} className="mt-3 w-full">Remove photo</Button></div>)}</div> : <p className="mt-5 rounded-lg bg-muted p-4 text-sm">No photos yet. Your text report is already saved.</p>}
-    {pending.length > 0 && <div role="alert" className="mt-5 rounded-lg border border-amber-300 bg-amber-50 p-4"><p className="text-sm">Finish these operations before leaving this page. Recovery details are kept in this tab only.</p>{pending.map((operation, index) => <Button key={operation.path} disabled={busy} variant="outline" onClick={() => void retry(operation)} className="mt-3 mr-2">{operation.kind === "removal" ? "Retry removal" : "Reconcile upload"} {index + 1}</Button>)}</div>}
-    {photos.length < MAX_PHOTOS && <div className="mt-6 space-y-3"><label htmlFor="report-photos" className="block font-medium">Add photos ({MAX_PHOTOS - photos.length} remaining)</label><input ref={fileInput} id="report-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple disabled={busy || pending.length > 0} aria-describedby="photo-file-help" className="block min-h-11 w-full min-w-0 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-muted file:px-3 file:py-3 file:text-primary" onChange={event => { setSelection(Array.from(event.target.files ?? [])); setMessage(""); }} /><p id="photo-file-help" className="text-sm text-muted-foreground">Choose up to {MAX_PHOTOS - photos.length} files. To replace a photo, remove it first.</p><Button type="button" disabled={busy || pending.length > 0 || !selection.length} onClick={() => void add()}>{busy ? "Working…" : `Upload${selection.length ? ` ${selection.length} photo${selection.length === 1 ? "" : "s"}` : " photos"}`}</Button></div>}
-    {message && <p role="status" aria-live="polite" className="mt-4 text-sm">{message}</p>}
-  </section>;
+  return (
+    <section aria-labelledby="photos-heading" className="mt-8 rounded-3xl border-2 border-border/80 bg-card p-6 shadow-[4px_4px_0px_0px_rgba(17,24,39,0.06)] sm:p-8">
+      <div className="border-b border-border/60 pb-3">
+        <h2 id="photos-heading" className="text-xl font-bold text-foreground">
+          Hình ảnh đính kèm{" "}
+          <span className="text-sm font-semibold text-muted-foreground">({photos.length}/{MAX_PHOTOS})</span>
+        </h2>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+          Tùy chọn: Định dạng JPEG, PNG hoặc WebP, dung lượng tối đa 5 MiB mỗi ảnh. Hình ảnh sẽ được hiển thị cho thành viên đã đăng nhập.
+        </p>
+      </div>
+
+      {photos.length ? (
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {photos.map((photo, index) => (
+            <div key={photo.id} className="min-w-0 rounded-2xl border border-border bg-muted/30 p-3">
+              <PrivatePhoto photo={photo} number={index + 1} />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={busy || pending.length > 0}
+                onClick={() => void remove(photo)}
+                aria-label={`Remove report photo ${index + 1}`}
+                className="mt-3 w-full text-destructive hover:bg-destructive/10 hover:border-destructive/30"
+              >
+                Xóa ảnh này
+              </Button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-6 rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center text-xs text-muted-foreground">
+          Chưa có hình ảnh nào được tải lên. Tin báo dạng văn bản của bạn đã được lưu an toàn.
+        </div>
+      )}
+
+      {pending.length > 0 && (
+        <div role="alert" className="mt-5 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-950 text-xs">
+          <p className="font-semibold">Hoàn tất các tác vụ đang chờ trước khi rời khỏi trang này:</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {pending.map((operation, index) => (
+              <Button
+                key={operation.path}
+                disabled={busy}
+                variant="outline"
+                size="sm"
+                onClick={() => void retry(operation)}
+              >
+                {operation.kind === "removal" ? "Thử lại thao tác xóa" : "Xác nhận tải lên"} #{index + 1}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {photos.length < MAX_PHOTOS && (
+        <div className="mt-6 space-y-3 rounded-2xl border border-border bg-secondary/30 p-5">
+          <label htmlFor="report-photos" className="block text-sm font-semibold text-foreground">
+            Thêm ảnh mới ({MAX_PHOTOS - photos.length} vị trí còn trống)
+          </label>
+          <input
+            ref={fileInput}
+            id="report-photos"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            disabled={busy || pending.length > 0}
+            aria-describedby="photo-file-help"
+            className="block min-h-11 w-full min-w-0 rounded-xl border border-border bg-card px-3 py-2 text-xs text-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-secondary file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-primary hover:file:bg-primary hover:file:text-white transition-colors"
+            onChange={(event) => {
+              setSelection(Array.from(event.target.files ?? []));
+              setMessage("");
+            }}
+          />
+          <p id="photo-file-help" className="text-xs text-muted-foreground">
+            Chọn tối đa {MAX_PHOTOS - photos.length} tệp ảnh cùng lúc. Nếu muốn thay ảnh, hãy xóa ảnh cũ trước.
+          </p>
+          <Button
+            type="button"
+            size="default"
+            disabled={busy || pending.length > 0 || !selection.length}
+            onClick={() => void add()}
+            className="rounded-xl"
+          >
+            {busy ? "Đang xử lý…" : `Tải lên${selection.length ? ` ${selection.length} ảnh` : " ảnh"}`}
+          </Button>
+        </div>
+      )}
+
+      {message && (
+        <p role="status" aria-live="polite" className="mt-4 text-xs font-semibold text-primary">
+          {message}
+        </p>
+      )}
+    </section>
+  );
 }

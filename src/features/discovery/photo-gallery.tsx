@@ -59,8 +59,58 @@ export function DiscoveryPhotos({ itemId }: { itemId: string }) {
     return () => { if (timer) clearTimeout(timer); access.dispose(); subscription.unsubscribe(); window.removeEventListener("pageshow", schedule); window.removeEventListener("focus", schedule); window.removeEventListener("pagehide", suspend); document.removeEventListener("visibilitychange", visibility); };
   }, [itemId, attempt]);
   useEffect(() => { if (frame.current) frame.current.hidden = view.phase !== "ready"; }, [view]);
-  return <section aria-labelledby="item-photos-heading" className="mt-7 rounded-xl border border-primary/15 bg-white p-5 sm:p-7"><h2 id="item-photos-heading" className="text-xl font-semibold">Item photos</h2><p className="mt-2 text-sm text-muted-foreground">Report photos are available only to signed-in members with permission to view this item.</p>
-    {view.phase !== "ready" && <div className="mt-5 flex flex-col items-center gap-3 rounded-lg bg-muted p-7 text-center text-sm text-muted-foreground"><ImageOff aria-hidden="true" className="size-8" />{view.phase === "checking" ? <p role="status">Checking photo access…</p> : view.phase === "anonymous" ? <><p>Sign in to view permitted photos.</p><Button asChild variant="outline"><Link href={`/login?next=${encodeURIComponent(`/items/${itemId}`)}`}>Sign in to view photos</Link></Button></> : <><p role="alert">Photos could not be loaded for this session.</p><Button variant="outline" onClick={() => setAttempt(value => value + 1)}>Retry photo access</Button></>}</div>}
-    <div ref={frame} hidden={view.phase !== "ready"} className="mt-5">{view.phase === "ready" && (view.photos.length ? <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{view.photos.map((photo, index) => <AuthorizedPhoto key={`${view.userId}:${photo.id}`} photo={photo} number={index + 1} />)}</div> : <p className="rounded-lg bg-muted p-5 text-sm text-muted-foreground">No photos have been attached to this report.</p>)}</div>
-  </section>;
+  return (
+    <section aria-labelledby="item-photos-heading" className="mt-8 rounded-3xl border-2 border-border/80 bg-card p-6 shadow-[4px_4px_0px_0px_rgba(17,24,39,0.06)] sm:p-8">
+      <div className="border-b border-border/60 pb-3">
+        <h2 id="item-photos-heading" className="text-xl font-bold text-foreground">
+          Hình ảnh món đồ
+        </h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Hình ảnh đính kèm chỉ hiển thị cho thành viên đã đăng nhập nhằm bảo vệ quyền riêng tư.
+        </p>
+      </div>
+
+      {view.phase !== "ready" && (
+        <div className="mt-6 flex flex-col items-center gap-3 rounded-2xl bg-muted/60 p-8 text-center text-sm text-muted-foreground">
+          <div className="flex size-12 items-center justify-center rounded-2xl bg-card text-muted-foreground shadow-2xs">
+            <ImageOff aria-hidden="true" className="size-6 text-muted-foreground/70" />
+          </div>
+          {view.phase === "checking" ? (
+            <p role="status" className="font-medium">Đang kiểm tra quyền xem ảnh…</p>
+          ) : view.phase === "anonymous" ? (
+            <div className="space-y-3">
+              <p className="font-medium text-foreground">Đăng nhập tài khoản trường để xem hình ảnh đính kèm.</p>
+              <Button asChild variant="default" size="sm">
+                <Link href={`/login?next=${encodeURIComponent(`/items/${itemId}`)}`}>
+                  Đăng nhập để xem ảnh
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p role="alert" className="text-destructive font-medium">Không thể tải ảnh cho phiên làm việc hiện tại.</p>
+              <Button variant="outline" size="sm" onClick={() => setAttempt((value) => value + 1)}>
+                Thử lại quyền truy cập ảnh
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div ref={frame} hidden={view.phase !== "ready"} className="mt-6">
+        {view.phase === "ready" &&
+          (view.photos.length ? (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {view.photos.map((photo, index) => (
+                <AuthorizedPhoto key={`${view.userId}:${photo.id}`} photo={photo} number={index + 1} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
+              Người đăng không đính kèm hình ảnh cho tin báo này.
+            </div>
+          ))}
+      </div>
+    </section>
+  );
 }
