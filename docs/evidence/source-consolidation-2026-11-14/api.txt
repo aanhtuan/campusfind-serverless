@@ -1,0 +1,19 @@
+PASS: Three separate Auth identities; user metadata cannot provision ADMIN
+PASS: A creates FOUND report and uploads private photo; B downloads registered image
+PASS: Public discovery exposes active text while anonymous private photo download fails
+PASS: Claim submission is private, identity-bound and idempotent; reporter cannot self-claim
+PASS: Cross-user report edit, direct claim write, role escalation and claimant self-review rejected
+PASS: Concurrent Edge approval: exactly one winner, competing rejection and atomic IN_PROGRESS
+PASS: Private campus arrangement accepted by other party; stale and unrelated acceptance rejected
+PASS: Optional contact requires consent, stays participant-only and supports revocation
+PASS: Interrupted handover pauses confirmations until both participants agree to resume
+PASS: Separate confirmations prevent impersonation/duplicates; resolution hides public report and preserves history; reporter closes
+PASS: Rejection keeps item open; claimant cannot alter decision; subsequent pending claim can be cancelled
+PASS: Independent LOST resolution and closure; direct backwards status update denied
+PASS: LOST finder response is idempotent; owner selects one, no self-response or premature handover/recovery
+PASS: LOST private owner evidence is actor-bound and competitor-hidden; finder may reject mismatch
+PASS: LOST selection withdrawal and reselection work; verified finder delivers, reporter receives, two confirmations resolve and close
+PASS: Edge rejects missing authenticated session
+PASS: Edge validates strict fields, malformed JSON, 32 KiB limit, method and invalid tokens; signed synthetic expired local JWT rejected
+LOCAL API WORKFLOW: 17 passed; hosted E2E NOT RUN.
+Disposable local API fixtures cleaned.

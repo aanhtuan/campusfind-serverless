@@ -1,3 +1,6 @@
+import { formatCampusDate } from "@/lib/dates";
+import { ReportActors } from "@/features/identity/actor-summary";
+import type { ActorLabels } from "@/features/identity/actors";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -176,7 +179,7 @@ export function SearchFilters({ filters }: { filters: DiscoveryFilters }) {
   );
 }
 
-export function DiscoveryCard({ item }: { item: DiscoverySummary }) {
+export function DiscoveryCard({ item, labels, viewerId }: { item: DiscoverySummary; labels?: ActorLabels; viewerId?: string }) {
   const isLost = item.type === "LOST";
 
   return (
@@ -207,6 +210,8 @@ export function DiscoveryCard({ item }: { item: DiscoverySummary }) {
             {item.title}
           </Link>
         </h2>
+
+        <ReportActors item={item} labels={labels} viewerId={viewerId} />
 
         {/* Item Metadata */}
         <dl className="mt-4 flex-1 space-y-2.5 text-xs text-muted-foreground">
@@ -248,7 +253,11 @@ export function DiscoveryResults({
   filters,
   items,
   hasNext,
+  labels,
+  viewerId,
 }: {
+  labels?: Map<string, ActorLabels>;
+  viewerId?: string;
   filters: DiscoveryFilters;
   items: DiscoverySummary[];
   hasNext: boolean;
@@ -277,7 +286,7 @@ export function DiscoveryResults({
       {items.length ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
-            <DiscoveryCard key={item.id} item={item} />
+            <DiscoveryCard key={item.id} item={item} labels={labels?.get(`item:${item.id}`)} viewerId={viewerId} />
           ))}
         </div>
       ) : (
@@ -397,7 +406,7 @@ export function DiscoveryDetails({ item }: { item: DiscoveryItem }) {
         <div>
           <dt className="text-xs font-semibold text-muted-foreground uppercase">Ngày đăng tin</dt>
           <dd className="mt-1 font-bold text-foreground">
-            <time dateTime={item.created_at}>{item.created_at.slice(0, 10)}</time>
+            <time dateTime={item.created_at}>{formatCampusDate(item.created_at)}</time>
           </dd>
         </div>
       </dl>
@@ -414,19 +423,11 @@ export function DiscoveryDetails({ item }: { item: DiscoveryItem }) {
         </div>
       </div>
 
-      {/* Safe Verification & Ownership Claim Notice */}
-      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-amber-200/80 bg-amber-50/70 p-4 sm:p-5 text-amber-950">
-        <ShieldAlert className="size-5 text-amber-700 shrink-0 mt-0.5" />
-        <div className="text-xs leading-relaxed space-y-1">
-          <p className="font-bold text-amber-900 text-sm">
-            Quy trình nhận lại đồ an toàn
-          </p>
-          <p>
-            Để bảo vệ quyền lợi chính đáng của chủ sở hữu, hãy chuẩn bị trước các thông tin/bằng chứng xác thực riêng biệt (chi tiết không công khai, ảnh cũ, mật khẩu mở khóa thiết bị...) và đối chiếu trực tiếp tại văn phòng hỗ trợ của trường.
-          </p>
-          <p className="text-amber-800/90 pt-1">
-            Tính năng gửi yêu cầu nhận đồ (Claim) trực tuyến đang được cập nhật ở phiên bản tiếp theo.
-          </p>
+      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-primary/20 bg-primary/5 p-4 sm:p-5">
+        <ShieldAlert aria-hidden="true" className="size-5 shrink-0 text-primary" />
+        <div className="space-y-2 text-sm leading-relaxed">
+          <p className="font-bold">Xác minh quyền sở hữu và nhận lại đồ an toàn</p>
+          <p className="text-muted-foreground">{item.type === "LOST" ? "Nếu đang giữ món đồ có thể phù hợp, hãy gửi phản hồi riêng cho người báo mất. Khi phản hồi được chọn, chủ đồ gửi bằng chứng để bạn đối chiếu trước khi thống nhất bàn giao. Không trao đồ chỉ dựa vào mô tả công khai." : "Với tin nhặt được đang mở, bạn có thể gửi bằng chứng riêng cho người đăng để được xét duyệt. Sau khi yêu cầu được chấp thuận, hai bên thống nhất điểm hẹn trong trường và cùng xác nhận bàn giao."} Không chia sẻ mật khẩu hoặc giấy tờ định danh trong bằng chứng.</p>
         </div>
       </div>
     </article>

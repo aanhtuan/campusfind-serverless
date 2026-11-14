@@ -1,0 +1,4 @@
+PASS: FOUND competing selections commit exactly one approval, one rejection without deadlock
+PASS: concurrent proposals cannot overwrite the same revision
+PASS: concurrent two-party confirmations preserve both timestamps and resolve atomically
+Workflow concurrency fixtures cleaned

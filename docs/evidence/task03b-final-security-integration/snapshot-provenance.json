@@ -1,0 +1,17 @@
+{
+  "base": "a3f91c31235b2102fea2e3dbebbc9af4f3f59de2",
+  "auth_worktree": "/home/atuna/.codex/worktrees/7fb9/campusfind-serverless",
+  "dependency_worktree": "/home/atuna/.codex/worktrees/nextjs-security/campusfind-serverless",
+  "snapshot": "/tmp/campusfind-final-security-integration/combined-snapshot",
+  "hashes": {
+    "package.json": "0a727b5a7579339ed72386ea1d1bde446341a37eba598d984104a5d6eabe8c05",
+    "package-lock.json": "4e6cd84533a0d25f03f3f9625aea919be870b820e37e72b13663afa7c90331c0",
+    "next.config.ts": "817739e6700bcc02c892b601483d8aa0db63bdb1707538989aff3fed4e4ec2dc",
+    "src/features/auth/auth-form.tsx": "0c25fa647203434900f7274d4444b6ef56b4b91392671ae649783ac385047007",
+    "src/features/auth/development-validation.tsx": "30eae93dbaab4fcfd9f5ec5620b548adb91d4df8a05f5eaafb255c8b3daa95bc",
+    ".github/workflows/ci.yml": "e333161aef3daafcb684a7018e65d69636e4dd955b3450bca7e47eb61facd754",
+    "tests/auth-routes-smoke.mjs": "3392034689239b1fb48e15570d7a669cca97b19f712d97322b5758120b2c6ae0"
+  },
+  "git_integration_performed": false,
+  "cloud_credentials_copied": false
+}

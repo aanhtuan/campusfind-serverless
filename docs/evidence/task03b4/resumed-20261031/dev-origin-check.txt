@@ -1,0 +1,2 @@
+PASS: public dev asset Origin http://127.0.0.1:3200 HTTP 200
+PASS: public dev asset Origin https://unapproved.example HTTP 403

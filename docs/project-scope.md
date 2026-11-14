@@ -1,52 +1,31 @@
 # CampusFind MVP scope
 
-## Purpose
+CampusFind helps a single university community report misplaced belongings and return them through an integrated, private ownership workflow. The application retains Next.js on Vercel and managed Supabase Auth / PostgreSQL / Storage / Edge Functions. No separate Node server or external paid service is introduced.
 
-Help university communities report misplaced belongings, discover relevant reports, and return items safely. Task 01 creates only the project foundation. The following three modules are a proposed MVP grouping for review; detailed roles, campus membership verification, and moderation policy must be agreed before implementation.
+## Accounts and access
 
-## 1. Accounts & Access
+Registration, login, email verification, logout, verified SSR identity, safe redirects, protected routes and stale-session masking are implemented. Database roles are USER/ADMIN; registration cannot provision ADMIN and user metadata is not authorization. The current membership model is any authenticated account in one campus; university-domain verification and multi-campus isolation require a separately agreed access policy.
 
-- Sign in and sign out through Supabase Auth.
-- Maintain authenticated sessions across browser and server rendering.
-- Protect member routes and define student/staff access boundaries.
-- Decide campus identity verification and staff authorization before exposing member data.
+## Reporting and discovery
 
-Acceptance: members can authenticate and sign out; protected pages reject unauthenticated access; sessions are handled securely; access cannot be gained by editing browser state.
+Members create/edit their own LOST/FOUND reports, keep history, manage up to three registered private photos, and recover old unregistered staged uploads. Public visitors browse active report text with title, type, category and location filters and bounded pagination. Photos require a member session. Reports use OPEN, IN_PROGRESS, RESOLVED and CLOSED; terminal reports disappear from discovery while authorized history remains.
 
-## 2. Item Reporting & Discovery
+## Claims and resolution
 
-- Submit lost or found reports with title, description, category, campus location, date, and optional photos.
-- Browse reports, view details, and search/filter by category, location, report type, and status.
-- Let report owners update their own reports and track whether an item remains open or is resolved.
-- Store photos in Supabase Storage with approved access policies.
+Another authenticated member can claim an OPEN FOUND report with immutable private evidence (20–5000 characters) and preview before submission. Active duplicates and self-claims are rejected. Claimants can cancel pending requests. Actual reporters review pending claims; one atomic approval rejects competing pending claims and starts the return. ADMIN receives no automatic evidence access.
 
-Acceptance: valid reports can be created and found through filters; owners can edit only their reports; uploads enforce approved restrictions; contact information follows the agreed privacy policy.
+Approved participants propose/accept revisioned arrangements at a public campus desk and can request changes before confirmation. Contact sharing is optional and requires explicit consent; account email is never automatically copied. Reporter and claimant confirm their own side separately. Both confirmations are required for matched FOUND and LOST resolution. The reporter may close a completed record; LOST owners can independently resolve an item they recover when no response is selected.
 
-Existing `feature/reporting` and `feature/search` both map to this module.
+For an OPEN LOST report another member sends a private finder response. The reporter selects one response and submits immutable ownership evidence; only the selected finder can verify it. Selection does not establish ownership or start handover. Mismatch or withdrawal ends the selection while leaving the report OPEN. Verified matches use the shared arrangement and two-confirmation workflow, with the reporter receiving and the finder delivering. Pending responses are rejected atomically at independent recovery or final verification. See [the full flow and tests](lost-finder-workflow.md).
 
-## 3. Claims & Resolution
+A structured operational issue pauses coordination/completion. Each participant must independently agree to resume; approved claims and existing confirmations remain recorded. A minimal ADMIN page exposes aggregate status counts and structured issue acknowledgement, without contact, evidence or unilateral forced resolution. Unresolved disputes require campus human assistance; full adjudication/reassignment is deferred.
 
-- Allow members to claim a found item with ownership evidence.
-- Allow the responsible reporter or authorized staff to review a claim and accept or reject it.
-- Record the claim outcome and confirmed return, with controlled status transitions.
-- Limit ownership evidence and claim details to authorized participants.
+## Acceptance and release
 
-Acceptance: unauthorized users cannot read private claim evidence or change outcomes; acceptance and return are distinct states; the final item status reflects a confirmed handover. Evidence requirements and dispute handling must be decided before development.
+The source implementation and local evidence are documented in [MVP completion](mvp-completion.md), including real PostgreSQL/RLS/concurrency and local API/browser results. Hosted positive Auth/email, Storage, Edge and cross-user E2E acceptance must be recorded after separately authorized migration/function deployment and fixtures. Local tests do not establish hosted behavior or production readiness.
 
-## Foundation boundaries
+See [workflow and security design](mvp-workflow.md), [initial feature audit](mvp-audit.md) and [deployment approval procedure](mvp-deployment.md).
 
-Included in Task 01: Next.js/TypeScript/Tailwind/ESLint setup, shared UI foundation, folder conventions, installed Supabase libraries, public configuration placeholders, landing page, and documentation.
+## Beyond this MVP
 
-Deferred: authentication UI, database schema/migrations, row-level security policies, Storage buckets, Edge Functions, CRUD/search/claim endpoints, real user data, and deployments. The landing page describes future capabilities and must not imply these features are available.
-
-## Beyond the MVP
-
-Automatic image matching, AI recommendations, chat, push notifications, gamification, analytics dashboards, cross-university federation, and paid service provisioning are out of scope.
-
-## Suggested delivery order
-
-1. Accounts & Access, including an explicit identity and authorization decision.
-2. Approve the database/Storage design and access policies in a separate task.
-3. Item Reporting & Discovery.
-4. Claims & Resolution.
-5. End-to-end validation and a separately approved deployment.
+Realtime chat, automatic image matching, AI recommendations, push/email notifications for each workflow event, gamification, cross-campus federation, paid provisioning, image content scanning/EXIF stripping, background orphan sweeps/quotas, description/full-text search, forced Admin dispute decisions and university-membership verification are deferred. The existing title search, private Storage model and free-tier-friendly serverless architecture are preserved.

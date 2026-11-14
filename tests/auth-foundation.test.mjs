@@ -168,7 +168,7 @@ test('PKCE code is exchanged and callback uses configured origin over spoofed Ho
 test('signUp excludes user-controlled role/id/metadata and uses trusted email URL', async () => {
   let args;
   const service = createAuthService({ auth: { signUp: async input => { args = input; return { error: null }; } } });
-  assert.deepEqual(await service.signUp({ email: ' a@example.invalid ', password: 'test-only', role: 'ADMIN', user_id: 'spoof', options: { data: { role: 'ADMIN' } } }, '//evil.example'), { ok: true });
+  assert.deepEqual(await service.signUp({ email: ' a@example.invalid ', password: 'test-only', role: 'ADMIN', user_id: 'spoof', options: { data: { role: 'ADMIN' } } }, '//evil.example'), { ok: true, authenticated: false });
   assert.deepEqual(Object.keys(args).sort(), ['email', 'options', 'password']);
   assert.equal(args.email, 'a@example.invalid'); assert.equal(args.options.data, undefined);
   const callback = new URL(args.options.emailRedirectTo); assert.equal(callback.origin, 'https://campusfind.example'); assert.equal(callback.pathname, '/auth/callback'); assert.equal(callback.searchParams.get('next'), '/dashboard');
@@ -265,3 +265,10 @@ test('SIGNED_IN schedules verification outside callback and cleanup cancels it',
   fixture.monitor.event('SIGNED_IN'); fixture.monitor.dispose();
   await new Promise(resolve => setTimeout(resolve, 10)); assert.equal(calls, 1);
 });
+
+for (const authenticated of [true, false]) {
+  test(`signup reports actual session availability: ${authenticated}`, async () => {
+    const service = createAuthService({ auth: { signUp: async () => ({ data: { session: authenticated ? { access_token: 'test-only' } : null }, error: null }) } });
+    assert.deepEqual(await service.signUp({ email: 'new@example.invalid', password: 'test-only' }), { ok: true, authenticated });
+  });
+}

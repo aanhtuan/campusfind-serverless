@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { accountCode } from "@/features/identity/actors";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FileText,
+  Inbox,
+  ShieldCheck,
   HeartHandshake,
   LayoutDashboard,
   MapPin,
@@ -14,6 +17,8 @@ import {
   X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
+import { LogoutButton } from "@/features/auth/logout-button";
 import { cn } from "@/lib/utils";
 
 interface CampusHeaderProps {
@@ -29,6 +34,36 @@ export function CampusHeader({
 }: CampusHeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [admin, setAdmin] = useState(false);
+  const [identity, setIdentity] = useState<{ id: string; name: string } | null>(null);
+  useEffect(() => {
+    if (!authenticated) return;
+    const client = createClient();
+    let disposed = false;
+    let generation = 0;
+    const timers = new Set<ReturnType<typeof setTimeout>>();
+    const check = async () => {
+      const ticket = ++generation;
+      try {
+        const { data, error } = await client.auth.getUser();
+        const profile = !error && data.user ? await client.from("profiles").select("role,display_name").eq("id", data.user.id).maybeSingle() : null;
+        if (!disposed && ticket === generation) {
+          setAdmin(!profile?.error && profile?.data?.role === "ADMIN");
+          setIdentity(!error && data.user ? { id: data.user.id, name: profile?.data?.display_name?.trim() || "Thành viên" } : null);
+        }
+      } catch { if (!disposed && ticket === generation) { setAdmin(false); setIdentity(null); } }
+    };
+    const schedule = () => {
+      const timer = setTimeout(() => { timers.delete(timer); void check(); }, 0);
+      timers.add(timer);
+    };
+    schedule();
+    const { data: { subscription } } = client.auth.onAuthStateChange(event => {
+      if (event === "SIGNED_OUT") { generation++; setAdmin(false); setIdentity(null); }
+      else if (event === "SIGNED_IN" || event === "USER_UPDATED") schedule();
+    });
+    return () => { disposed = true; generation++; timers.forEach(clearTimeout); subscription.unsubscribe(); };
+  }, [authenticated]);
 
   const navLinks = [
     {
@@ -63,15 +98,17 @@ export function CampusHeader({
     },
     {
       href: "/my-claims",
-      label: "Yêu cầu nhận đồ",
+      label: "Yêu cầu & phản hồi",
       icon: HeartHandshake,
-      active: pathname.startsWith("/my-claims"),
+      active: pathname.startsWith("/my-claims") || pathname.startsWith("/claims"),
     },
+    { href: "/incoming-claims", label: "Phản hồi gửi đến", icon: Inbox, active: pathname.startsWith("/incoming-claims") },
+    ...(authenticated && admin ? [{ href: "/admin", label: "Quản trị", icon: ShieldCheck, active: pathname.startsWith("/admin") }] : []),
   ];
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 flex-wrap px-4 py-3.5 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link
           href="/"
@@ -95,7 +132,7 @@ export function CampusHeader({
         {/* Desktop Navigation */}
         <nav
           aria-label="Điều hướng chính"
-          className="hidden items-center gap-2 md:flex"
+          className={cn("hidden items-center gap-2 lg:flex", authenticated && "order-3 w-full flex-wrap border-t border-border/60 pt-3")}
         >
           {navLinks.map((link) => {
             const Icon = link.icon;
@@ -142,17 +179,18 @@ export function CampusHeader({
         </nav>
 
         {/* Desktop Auth CTAs */}
-        <div className="hidden items-center gap-2.5 md:flex">
+        <div className="ml-auto hidden items-center gap-2.5 lg:flex">
           {authenticated ? (
             <div className="flex items-center gap-2">
               <Button asChild variant="outline" size="sm" className="rounded-xl">
                 <Link href="/dashboard" className="gap-2">
                   <span className="size-2 rounded-full bg-emerald-500" />
                   <span className="max-w-[130px] truncate">
-                    {displayName || userEmail?.split("@")[0] || "Tài khoản"}
+                    {identity?.name || displayName || userEmail?.split("@")[0] || "Tài khoản"}
                   </span>
                 </Link>
               </Button>
+              <LogoutButton />
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -166,8 +204,12 @@ export function CampusHeader({
           )}
         </div>
 
+        {authenticated && identity && <Link href="/dashboard" className="order-3 w-full rounded-xl bg-secondary/60 px-3 py-2 text-xs [overflow-wrap:anywhere]" aria-label="Tài khoản đang đăng nhập">
+          Đang đăng nhập: <strong>{identity.name}</strong> · {accountCode(identity.id)}
+        </Link>}
+
         {/* Mobile Hamburger Button */}
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="ml-auto flex items-center gap-2 lg:hidden">
           <Button
             variant="outline"
             size="icon"
@@ -191,7 +233,7 @@ export function CampusHeader({
           role="dialog"
           aria-modal="true"
           aria-label="Menu điều hướng di động"
-          className="border-b border-border bg-card px-4 pt-3 pb-6 shadow-md md:hidden"
+          className="border-b border-border bg-card px-4 pt-3 pb-6 shadow-md w-full lg:hidden"
         >
           <nav className="flex flex-col gap-1.5">
             {navLinks.map((link) => {
@@ -257,6 +299,7 @@ export function CampusHeader({
                     Vào Dashboard
                   </Link>
                 </Button>
+                <LogoutButton />
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2 pt-2">

@@ -1,0 +1,23 @@
+campusfind-serverless@0.1.0 /home/atuna/.codex/worktrees/7fb9/campusfind-serverless
+├─┬ eslint-config-next@16.4.0
+│ ├─┬ @next/eslint-plugin-next@16.4.0
+│ │ └─┬ fast-glob@3.3.1
+│ │   └─┬ micromatch@4.0.8
+│ │     └── braces@3.0.3
+│ ├─┬ eslint-plugin-import@2.32.0
+│ │ └── minimatch@3.1.5 deduped
+│ ├─┬ eslint-plugin-jsx-a11y@6.10.2
+│ │ └── minimatch@3.1.5 deduped
+│ ├─┬ eslint-plugin-react@7.37.5
+│ │ └── minimatch@3.1.5 deduped
+│ └─┬ typescript-eslint@8.71.1
+│   └─┬ @typescript-eslint/typescript-estree@8.71.1
+│     └── minimatch@10.2.6
+├─┬ eslint@9.39.5
+│ ├─┬ @eslint/config-array@0.21.2
+│ │ └── minimatch@3.1.5 deduped
+│ ├─┬ @eslint/eslintrc@3.3.7
+│ │ └── minimatch@3.1.5 deduped
+│ └── minimatch@3.1.5
+└─┬ next@16.4.0
+  └── sharp@0.35.5

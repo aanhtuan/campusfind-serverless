@@ -1,0 +1,12 @@
+Human entered credentials directly in browser.
+PASS: Dashboard with USER role after sign-in.
+PASS: Existing dev harness own profile read (verified id and USER).
+PASS: role UPDATE impossible-row probe rejected with 42501.
+PASS: id UPDATE impossible-row probe rejected with 42501.
+PASS: explicit refreshSession then verified getUser preserves identity.
+PASS: four concurrent cookie-authenticated Dashboard requests return no-store.
+PASS: Dashboard persists after full browser reload and identity verification completes.
+PASS: Approved local-scope logout returned Login with loggedOut=1.
+PASS: Second protected tab automatically returned Login with next=/my-reports.
+PASS: Browser Back returned Login with next=/dashboard; no protected profile restored.
+PASS: New /my-claims navigation after logout returned Login with safe next.

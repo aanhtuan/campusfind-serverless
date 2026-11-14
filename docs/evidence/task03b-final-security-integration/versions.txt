@@ -1,0 +1,5 @@
+campusfind-serverless@0.1.0 /tmp/campusfind-final-security-integration/combined-snapshot
+├── @next/env@16.4.3
+├── eslint-config-next@16.4.3
+└─┬ next@16.4.3
+  └── @next/env@16.4.3 deduped

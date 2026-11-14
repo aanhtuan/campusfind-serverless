@@ -1,0 +1,6 @@
+PASS: Remote getUser confirmed current normal identity differs from known A.
+PASS: Own USER profile read.
+PASS: SELECT of A returned zero rows, no provider/network error.
+PASS: PATCH of A with its exact existing display_name returned zero rows.
+PASS: role, id, created_at, updated_at impossible-row probes reject with 42501.
+PASS: Own B profile snapshot unchanged after probes.

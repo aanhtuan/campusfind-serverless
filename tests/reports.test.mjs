@@ -168,3 +168,26 @@ test('a failed object deletion can resume after metadata has already been remove
   assert.equal((await removePhoto(fixture.ops,photo)).ok,true);
   assert.equal(fixture.calls.filter(call=>call[0]==='metadata-delete').length,1);
 });
+const { stagedUploads } = require('../src/features/reports/storage.ts');
+test('durable staged-upload scan is owner-scoped, bounded and skips recent/registered/invalid paths', async () => {
+  const client = clientFixture({data:{id:ID}}).client;
+  const calls = [];
+  let queryNumber = 0;
+  client.from = () => {
+    const builder = {};
+    for (const method of ['select','eq']) builder[method] = () => builder;
+    builder.maybeSingle = async () => ({data:{id:ID}});
+    builder.then = resolve => Promise.resolve({data:[{storage_path:photo.storage_path}]}).then(resolve);
+    queryNumber++; return builder;
+  };
+  const staged = '55555555-5555-4555-8555-555555555555';
+  client.storage.from = () => ({list: async (...args) => {
+    calls.push(args);
+    return {data:[{name:FILE+'.jpg',created_at:'2020-01-01'}, {name:staged+'.png',created_at:'2020-01-01'}, {name:'66666666-6666-4666-8666-666666666666.jpg',created_at:'2099-01-01'}, {name:'bad.jpg',created_at:'2020-01-01'}, {name:'77777777-7777-4777-8777-777777777777.jpg',created_at:'invalid'}]};
+  }});
+  assert.deepEqual(await stagedUploads(client,ID,A),[photoPath(A,ID,staged,'png')]);
+  assert.equal(calls[0][0],A+'/'+ID);assert.equal(calls[0][1].limit,100);assert.equal(queryNumber,2);
+});
+test('durable reconciliation discovery never lists Storage for a mismatched account', async () => {
+  const {client}=clientFixture();await assert.rejects(stagedUploads(client,ID,B),/unavailable/);
+});

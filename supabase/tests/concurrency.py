@@ -7,16 +7,21 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import subprocess
+import re
 import threading
 import time
 import tomllib
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--confirm-disposable-local', action='store_true', required=True)
-parser.parse_args()
+parser.add_argument('--runtime', choices=['podman', 'docker'], default='docker')
+parser.add_argument('--container')
+args = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
 config = tomllib.loads((root / 'supabase/config.toml').read_text())
-container = 'supabase_db_' + config['project_id']
+container = args.container or 'supabase_db_' + config['project_id']
+if args.container and not re.fullmatch(r'supabase_db_campusfind-mvp-[a-z0-9-]+', args.container):
+    raise SystemExit('Unexpected disposable local container')
 if config['project_id'] != 'campusfind-task02b':
     raise SystemExit('Refusing to test an unexpected project/container')
 
@@ -28,7 +33,7 @@ item_ids = [f'b0000000-0000-0000-0000-{i:012d}' for i in range(1, 6)]
 
 def sql(command, require_success=True):
     result = subprocess.run(
-        ['docker', 'exec', '-i', container, 'psql', '-X', '-U', 'postgres',
+        [args.runtime, 'exec', '-i', container, 'psql', '-X', '-U', 'postgres',
          '-d', 'postgres', '-v', 'ON_ERROR_STOP=1', '-At'],
         input=command, text=True, capture_output=True, timeout=30,
     )

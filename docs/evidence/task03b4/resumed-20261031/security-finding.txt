@@ -1,0 +1,4 @@
+Observed: blocked loopback dev assets prevented hydration; the old default GET form put credentials in a URL/dev log. A diagnostic tool read surfaced the query. No secret value is retained in this artifact.
+Fixed: exact allowed dev origin; auth URL logging suppression; disabled pre-hydration inputs/submit; POST fallback.
+Verified: loopback asset 200, unapproved Origin 403, raw SSR POST/disabled regression checks, successful human login and authenticated cross-user checks after fix.
+Remaining: human password rotation advised but not confirmed; historical browser/tool output not erased or claimed erased.

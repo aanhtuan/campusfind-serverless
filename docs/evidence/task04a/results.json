@@ -1,0 +1,19 @@
+{
+  "boundary": "Offline real components with simulated SDK; no hosted or RLS acceptance",
+  "results": [
+    "invalid fields produce accessible feedback",
+    "360px report detail no horizontal overflow",
+    "allowed edit persists and type is immutable in UI",
+    "four-file selection rejected before upload",
+    "unsupported file rejected",
+    "oversized file rejected",
+    "three photos persist on offline reload; additional upload control hidden",
+    "remove and re-upload work in offline fixture",
+    "360px photo gallery no horizontal overflow",
+    "LOST and FOUND create flows work with the offline SDK fixture",
+    "360px own report cards no horizontal overflow",
+    "360px create form no horizontal overflow",
+    "desktop create form no horizontal overflow",
+    "no browser runtime errors"
+  ]
+}

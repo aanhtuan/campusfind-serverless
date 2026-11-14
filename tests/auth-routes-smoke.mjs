@@ -7,7 +7,7 @@ const expectedOrigin = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://local
 async function read(path) {
   return fetch(new URL(path, base), { redirect: 'manual', signal: AbortSignal.timeout(15000) });
 }
-for (const path of ['/dashboard', '/items/new', '/my-reports', '/my-claims', '/dashboard/settings']) {
+for (const path of ['/dashboard', '/items/new', '/my-reports', '/my-claims', '/dashboard/settings', '/claims/new', '/incoming-claims', '/admin']) {
   const response = await read(path + '?page=2');
   assert.equal(response.status, 307, path);
   const destination = new URL(response.headers.get('location'), base);
@@ -23,9 +23,9 @@ for (const path of ['/', '/login']) {
   console.log(`PASS: local ${path} accessible`);
 }
 const browse = await read('/items');
-assert.equal(browse.status, 200); // Search & Discovery is integrated on main.
+assert.equal(browse.status, 200);
 assert.equal(browse.headers.get('location'), null);
-console.log('PASS: public /items is accessible without an auth redirect');
+console.log('PASS: /items browsing is accessible without authentication');
 for (const path of ['/auth/confirm?token_hash=short&type=recovery', '/auth/callback?code=short']) {
   const response = await read(path);
   assert.equal(response.status, 303);
@@ -36,7 +36,7 @@ for (const path of ['/auth/confirm?token_hash=short&type=recovery', '/auth/callb
   assert.match(response.headers.get('cache-control'), /private.*no-store/);
   console.log('PASS: malformed local callback rejected without credentials in redirect');
 }
-for (const [path, heading] of [['/login', 'Welcome back'], ['/register', 'Create your account'], ['/verify-email', 'Verify your email']]) {
+for (const [path, heading] of [['/login', 'Chào mừng quay lại'], ['/register', 'Tạo tài khoản'], ['/verify-email', 'Xác minh email']]) {
   const response = await read(path + '?next=https://external.example');
   assert.equal(response.status, 200);
   // Dev may replace the proxy header with no-store, which also forbids caching.
@@ -57,4 +57,26 @@ for (const [path, heading] of [['/login', 'Welcome back'], ['/register', 'Create
   assert.doesNotMatch(html, /\bformmethod\s*=\s*["']?get\b/i, 'No submit control may override the POST fallback with GET');
   console.log(`PASS: ${path} renders anonymous UI with safe links and no-store cache headers`);
 }
-console.log('NOT RUN: hosted Auth/session/email HTTP flows; these localhost GET requests have no Auth session');
+const approvedProject = process.argv[3];
+if (approvedProject) {
+  assert.equal(new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname, `${approvedProject}.supabase.co`, 'Explicit approved Cloud project must match local configuration');
+  const encode = value => Buffer.from(JSON.stringify(value)).toString('base64url');
+  // Entirely synthetic expired claims and an invalid signature. This never
+  // reads or revokes a real browser session, JWT or refresh token.
+  const access = `${encode({ alg: 'HS256', typ: 'JWT' })}.${encode({ sub: '00000000-0000-4000-8000-000000000001', role: 'authenticated', exp: 1 })}.${Buffer.alloc(32).toString('base64url')}`;
+  const session = { access_token: access, refresh_token: '000000000000', expires_at: 1, expires_in: 3600, token_type: 'bearer', user: { id: '00000000-0000-4000-8000-000000000001' } };
+  const cookieName = `sb-${approvedProject}-auth-token`;
+  const response = await fetch(new URL('/dashboard', base), {
+    headers: { Cookie: `${cookieName}=base64-${encode(session)}` },
+    redirect: 'manual', signal: AbortSignal.timeout(15000),
+  });
+  assert.equal(response.status, 307, 'Synthetic expired session with invalid refresh must fail closed');
+  const destination = new URL(response.headers.get('location'), base);
+  assert.equal(destination.pathname, '/login');
+  assert.equal(destination.origin, expectedOrigin);
+  assert.match(response.headers.get('cache-control'), /private.*no-store/);
+  const deletions = response.headers.getSetCookie();
+  assert.ok(deletions.some(value => value.startsWith(`${cookieName}=`) && /max-age=0/i.test(value)), 'Failed refresh must propagate the session-cookie deletion to the redirect');
+  console.log('PASS: synthetic expired cookie + nonexistent refresh token rejected; private Login redirect carries cookie deletion');
+}
+console.log('NOT RUN by this script: valid authenticated sessions, natural JWT expiration or email delivery. Synthetic rejection is narrower evidence.');

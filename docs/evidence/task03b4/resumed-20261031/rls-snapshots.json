@@ -1,0 +1,16 @@
+{
+  "scope": "Read-only administrative state verification, separate from normal-user public API RLS requests",
+  "before": {
+    "A": "98b93a5192470b957ee392f97c2f7d5c",
+    "B": "fac8a671ec8b27a9aecf974a82878e45"
+  },
+  "after_B_to_A": {
+    "A": "98b93a5192470b957ee392f97c2f7d5c",
+    "B": "fac8a671ec8b27a9aecf974a82878e45"
+  },
+  "after_A_to_B": {
+    "A": "98b93a5192470b957ee392f97c2f7d5c",
+    "B": "fac8a671ec8b27a9aecf974a82878e45"
+  },
+  "all_profiles_unchanged": true
+}

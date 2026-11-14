@@ -1,0 +1,6 @@
+PASS: actor-labels.test.sql: 24 assertions (rolled back)
+PASS: final-review.test.sql: 91 assertions (rolled back)
+PASS: lost-response.test.sql: 59 assertions (rolled back)
+PASS: security.test.sql: 75 assertions (rolled back)
+PASS: workflow.test.sql: 118 assertions (rolled back)
+LOCAL DATABASE: 367 assertions passed; hosted RLS acceptance NOT RUN.

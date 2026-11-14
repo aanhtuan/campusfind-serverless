@@ -153,3 +153,6 @@ vite.config.ts.timestamp-*
 *.pem
 *.key
 .DS_Store
+
+# Python test bytecode
+__pycache__/

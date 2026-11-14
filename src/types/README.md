@@ -1,4 +1,3 @@
 # Shared types
 
-Place cross-module TypeScript contracts here. Keep feature-only types with their feature.
-Generate Supabase database types after the schema is approved; no database types or migrations are introduced in Task 01.
+Place cross-module TypeScript contracts here; keep feature-only contracts with their feature. Reporting and workflow models currently live with those features. Generated Supabase types can be added after the reviewed schema is applied to the intended target; no hosted type generation or schema change is automatic.

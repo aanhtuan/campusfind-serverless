@@ -1,0 +1,5 @@
+PASS: Own profile read verifies current getUser identity and USER role.
+PASS: role/id impossible-row protected-column probes rejected with 42501.
+PASS: Explicit refreshSession followed by verified getUser keeps same identity.
+PASS: Four concurrent cookie-authenticated Dashboard requests return no-store.
+PASS: Four authenticated Dashboard requests launched concurrently with refreshSession; all no-store and verified identity preserved. Initially valid tokens; not concurrent expiration refresh.

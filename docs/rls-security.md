@@ -1,5 +1,7 @@
 # CampusFind RLS and security — Task 02B
 
+> Historical foundation document. The current additive schema, RPC permissions, claimant history and workflow policies are documented in [MVP workflow](mvp-workflow.md); current executed results are in [MVP completion](mvp-completion.md).
+
 The migrations combine explicit SQL privileges with RLS. An owner policy alone does not protect role/status columns: table-wide write privileges are revoked and replaced by column grants. Authenticated ADMIN users receive the same client permissions as USER users. Service-role credentials are server-only and are not present in repository files.
 
 ## Access matrix
@@ -113,3 +115,7 @@ Next task: **Supabase Development Setup and Authentication**. No changes in this
 - [Storage access control](https://supabase.com/docs/guides/storage/security/access-control)
 - [PostgreSQL 17 row locks](https://www.postgresql.org/docs/17/explicit-locking.html)
 - [PostgreSQL partial unique indexes](https://www.postgresql.org/docs/17/indexes-partial.html)
+
+## Scoped account display labels (2026-11-09)
+
+The later `20261109164457_scoped_actor_labels.sql` migration adds a private, authenticated SECURITY DEFINER reader with explicit scope authorization and an empty search path, behind a public SECURITY INVOKER wrapper. It exposes display names and stable account IDs only for visible item authors and participating claims, preserving self-only profile SELECT and private claimant identity. See [account roles and current verification](account-roles.md). Earlier foundation-only function and release statements above describe the original review.

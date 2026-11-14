@@ -1,0 +1,4 @@
+PASS: existing workflow reused; Node 22, npm ci, lint, auth/config tests, build, typecheck, production HTTP regressions, diagnostics 404, strict production audit.
+PASS: contents read only, disabled checkout credential persistence, fake public fixtures, no cloud secrets/deploys/continue-on-error.
+NOT RUN: GitHub-hosted CI.
+BLOCKED: dependency security patch is unmerged; current branch production audit fails.

@@ -1,0 +1,14 @@
+PASS: Three actual browser logins against local Supabase Auth
+PASS: Reporter creates report and registers a real private photo through UI
+PASS: Mobile discovery filters → detail → evidence preview → private claim; refresh preserves state without horizontal overflow
+PASS: Unrelated browser cannot view private claim or edit reporter record
+PASS: Reporter reviews and approves evidence, proposes campus arrangement; claimant accepts through UI
+PASS: Chosen contact requires explicit checkbox consent and supports revocation
+PASS: Ordinary account denied admin UI; explicitly provisioned local ADMIN triages issue without evidence/contact; both parties resume
+PASS: Network failure has recoverable UI; two separate confirmations resolve persisted item
+PASS: Resolved item disappears from discovery; reporter closes and claimant retains history
+PASS: LOST reporter creates report; mobile finder discovers it and previews/submits a private found response
+PASS: LOST selection requires separate private owner proof; owner cannot self-verify; unrelated member and ADMIN cannot read it
+PASS: LOST finder verifies owner and confirms delivery; reporter confirms receipt; resolved report leaves discovery and private history remains
+LOCAL BROWSER WORKFLOW: 12 passed; hosted E2E NOT RUN. Evidence: /tmp/campusfind-mvp-browser-evidence
+Disposable local browser fixtures cleaned.

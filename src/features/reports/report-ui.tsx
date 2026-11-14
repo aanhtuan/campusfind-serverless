@@ -1,3 +1,5 @@
+import { ReportActors } from "@/features/identity/actor-summary";
+import type { ActorLabels } from "@/features/identity/actors";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowRight, Calendar, MapPin, Tag } from "lucide-react";
@@ -42,7 +44,7 @@ export function ReportShell({
 
 export { StatusBadge };
 
-export function ReportCard({ report }: { report: ItemReport }) {
+export function ReportCard({ report, labels, viewerId }: { report: ItemReport; labels?: ActorLabels; viewerId?: string }) {
   const isLost = report.type === "LOST";
 
   return (
@@ -62,6 +64,8 @@ export function ReportCard({ report }: { report: ItemReport }) {
           {report.title}
         </Link>
       </h2>
+
+      <ReportActors item={report} labels={labels} viewerId={viewerId} />
 
       {/* Meta items */}
       <dl className="mt-4 flex-1 space-y-2.5 text-xs text-muted-foreground">

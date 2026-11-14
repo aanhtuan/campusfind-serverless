@@ -1,0 +1,44 @@
+
+> campusfind-serverless@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.4.3 (webpack)
+✓ Running next.config.ts took 18ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.2s
+  Running TypeScript ...
+  Finished TypeScript in 2.2s ...
+  Collecting page data using 19 workers ...
+  Generating static pages using 19 workers (0/3) ...
+✓ Generating static pages using 19 workers (3/3) in 243ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin
+├ ƒ /auth/callback
+├ ƒ /auth/confirm
+├ ƒ /auth/validation
+├ ƒ /claims/[id]
+├ ƒ /claims/new
+├ ƒ /dashboard
+├ ƒ /incoming-claims
+├ ƒ /items
+├ ƒ /items/[id]
+├ ƒ /items/new
+├ ƒ /login
+├ ƒ /my-claims
+├ ƒ /my-reports
+├ ƒ /my-reports/[id]
+├ ƒ /my-reports/[id]/edit
+├ ƒ /register
+└ ƒ /verify-email
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

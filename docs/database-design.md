@@ -1,5 +1,7 @@
 # CampusFind database design — Task 02B
 
+> Historical foundation document. The current additive schema, RPC permissions, claimant history and workflow policies are documented in [MVP workflow](mvp-workflow.md); current executed results are in [MVP completion](mvp-completion.md).
+
 This task defines the database contract for Accounts & Access, Item Reporting & Discovery, and Claims & Resolution. It adds no frontend features, Auth UI, Edge Functions, hosted project, or deployment. Four application tables live in `public`; internal trigger functions live in `campusfind_private`, outside the configured Data API schemas.
 
 ## Entity relationships

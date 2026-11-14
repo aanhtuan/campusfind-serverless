@@ -1,0 +1,6 @@
+PASS: concurrent fourth-image prevention (READ COMMITTED)
+PASS: concurrent fourth-image prevention (REPEATABLE READ)
+PASS: concurrent duplicate active claims
+PASS: concurrent APPROVED claims
+PASS: claim creation serialized against item closure
+Local concurrency fixtures cleaned up

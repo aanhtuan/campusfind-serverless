@@ -1,0 +1,2 @@
+PASS: real auto-confirm signup continues to authenticated dashboard
+Disposable signup fixture cleaned

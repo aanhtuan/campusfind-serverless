@@ -45,7 +45,7 @@ export function CampusFooter() {
               </li>
               <li>
                 <Link href="/my-claims" className="hover:text-primary transition-colors">
-                  Yêu cầu nhận lại đồ
+                  Yêu cầu & phản hồi
                 </Link>
               </li>
             </ul>
@@ -57,7 +57,7 @@ export function CampusFooter() {
             <ul className="mt-3 space-y-2.5 text-sm text-muted-foreground">
               <li>
                 <span className="block text-foreground/80 font-medium">Điểm hẹn an toàn:</span>
-                <span className="text-xs text-muted-foreground">Phòng Bảo vệ · Bàn trực Thư viện · Văn phòng Đoàn</span>
+                <span className="text-xs text-muted-foreground">Phòng Bảo vệ · Phòng Công tác sinh viên · Quầy tiếp nhận của trường</span>
               </li>
               <li className="pt-2">
                 <div className="flex items-start gap-1.5 text-xs text-amber-900 bg-amber-50/80 border border-amber-200/60 p-2.5 rounded-lg">

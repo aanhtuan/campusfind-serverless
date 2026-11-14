@@ -97,7 +97,7 @@ export function AuthForm({
         return;
       }
 
-      if (mode === "login") {
+      if (mode === "login" || (mode === "register" && "authenticated" in response && response.authenticated)) {
         const user = await service.getCurrentUser();
         if (!user) {
           setFailed(true);

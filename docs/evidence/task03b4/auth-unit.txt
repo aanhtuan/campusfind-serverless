@@ -1,0 +1,206 @@
+
+> campusfind-serverless@0.1.0 test:auth
+> node --test tests/auth-foundation.test.mjs
+
+TAP version 13
+# Subtest: safe return destinations preserve local paths/query and remove fragments
+ok 1 - safe return destinations preserve local paths/query and remove fragments
+  ---
+  duration_ms: 1.826791
+  type: 'test'
+  ...
+# Subtest: reject absolute/protocol-relative/control/backslash/encoded/dot-segment redirects
+ok 2 - reject absolute/protocol-relative/control/backslash/encoded/dot-segment redirects
+  ---
+  duration_ms: 0.292484
+  type: 'test'
+  ...
+# Subtest: protected routes use segment boundaries and keep browsing/landing public
+ok 3 - protected routes use segment boundaries and keep browsing/landing public
+  ---
+  duration_ms: 0.170562
+  type: 'test'
+  ...
+# Subtest: trusted site origin rejects credentials, external HTTP and paths
+ok 4 - trusted site origin rejects credentials, external HTTP and paths
+  ---
+  duration_ms: 0.351722
+  type: 'test'
+  ...
+# Subtest: email confirmation accepts only supported types and sanitized destinations
+ok 5 - email confirmation accepts only supported types and sanitized destinations
+  ---
+  duration_ms: 1.478752
+  type: 'test'
+  ...
+# Subtest: confirmation rejects missing/malformed/duplicate/unintended OTP inputs
+ok 6 - confirmation rejects missing/malformed/duplicate/unintended OTP inputs
+  ---
+  duration_ms: 0.390349
+  type: 'test'
+  ...
+# Subtest: code callback validation rejects ambiguous/error/token-hash payloads
+ok 7 - code callback validation rejects ambiguous/error/token-hash payloads
+  ---
+  duration_ms: 0.241793
+  type: 'test'
+  ...
+# Subtest: response adapter updates request cookies and preserves HttpOnly/options/cache on redirects
+ok 8 - response adapter updates request cookies and preserves HttpOnly/options/cache on redirects
+  ---
+  duration_ms: 3.750941
+  type: 'test'
+  ...
+# Subtest: successive cookie batches retain all chunks and deletion updates
+ok 9 - successive cookie batches retain all chunks and deletion updates
+  ---
+  duration_ms: 1.062224
+  type: 'test'
+  ...
+# Subtest: response adapters are request-scoped without shared cookies
+ok 10 - response adapters are request-scoped without shared cookies
+  ---
+  duration_ms: 0.68985
+  type: 'test'
+  ...
+# Subtest: anonymous users redirect with safe return to every protected root
+ok 11 - anonymous users redirect with safe return to every protected root
+  ---
+  duration_ms: 1.709358
+  type: 'test'
+  ...
+# Subtest: verified user proceeds; cookie-only session data is never consulted
+ok 12 - verified user proceeds; cookie-only session data is never consulted
+  ---
+  duration_ms: 0.61104
+  type: 'test'
+  ...
+# Subtest: expired/error/throwing verification fails closed
+ok 13 - expired/error/throwing verification fails closed
+  ---
+  duration_ms: 0.898047
+  type: 'test'
+  ...
+# Subtest: proxy passes refreshed cookies to downstream request and browser
+ok 14 - proxy passes refreshed cookies to downstream request and browser
+  ---
+  duration_ms: 0.488402
+  type: 'test'
+  ...
+# Subtest: failed refresh deletions propagate on the login redirect
+ok 15 - failed refresh deletions propagate on the login redirect
+  ---
+  duration_ms: 0.427077
+  type: 'test'
+  ...
+# Subtest: public routes survive anonymous/missing config; protected missing config is 503
+ok 16 - public routes survive anonymous/missing config; protected missing config is 503
+  ---
+  duration_ms: 1.291018
+  type: 'test'
+  ...
+# Subtest: invalid callback never contacts provider and strips all sensitive query values
+ok 17 - invalid callback never contacts provider and strips all sensitive query values
+  ---
+  duration_ms: 0.520465
+  type: 'test'
+  ...
+# Subtest: confirmation verifies OTP AND identity before redirecting, preserving cookies
+ok 18 - confirmation verifies OTP AND identity before redirecting, preserving cookies
+  ---
+  duration_ms: 0.760419
+  type: 'test'
+  ...
+# Subtest: provider failure or missing verified identity never grants callback success
+ok 19 - provider failure or missing verified identity never grants callback success
+  ---
+  duration_ms: 0.539463
+  type: 'test'
+  ...
+# Subtest: PKCE code is exchanged and callback uses configured origin over spoofed Host
+ok 20 - PKCE code is exchanged and callback uses configured origin over spoofed Host
+  ---
+  duration_ms: 0.410583
+  type: 'test'
+  ...
+# Subtest: signUp excludes user-controlled role/id/metadata and uses trusted email URL
+ok 21 - signUp excludes user-controlled role/id/metadata and uses trusted email URL
+  ---
+  duration_ms: 0.415449
+  type: 'test'
+  ...
+# Subtest: auth operations hide provider credentials/errors and do not return sessions
+ok 22 - auth operations hide provider credentials/errors and do not return sessions
+  ---
+  duration_ms: 0.39772
+  type: 'test'
+  ...
+# Subtest: signOut uses local scope, resend uses signup and current user is verified remotely
+ok 23 - signOut uses local scope, resend uses signup and current user is verified remotely
+  ---
+  duration_ms: 0.250411
+  type: 'test'
+  ...
+# Subtest: invalid trusted-origin configuration fails closed without redirecting externally
+ok 24 - invalid trusted-origin configuration fails closed without redirecting externally
+  ---
+  duration_ms: 0.439832
+  type: 'test'
+  ...
+# Subtest: registration validates email, trimmed name, password bounds and confirmation
+ok 25 - registration validates email, trimmed name, password bounds and confirmation
+  ---
+  duration_ms: 1.997545
+  type: 'test'
+  ...
+# Subtest: signup forwards only a validated display name and cannot forward ADMIN metadata
+ok 26 - signup forwards only a validated display name and cannot forward ADMIN metadata
+  ---
+  duration_ms: 0.293812
+  type: 'test'
+  ...
+# Subtest: profile name initializes only verified identity and only when existing name is null
+ok 27 - profile name initializes only verified identity and only when existing name is null
+  ---
+  duration_ms: 0.299293
+  type: 'test'
+  ...
+# Subtest: protected UI verifies identity before displaying data and rejects changed account
+ok 28 - protected UI verifies identity before displaying data and rejects changed account
+  ---
+  duration_ms: 0.223792
+  type: 'test'
+  ...
+# Subtest: cross-tab SIGNED_OUT immediately hides stale data and discards pending success
+ok 29 - cross-tab SIGNED_OUT immediately hides stale data and discards pending success
+  ---
+  duration_ms: 0.153434
+  type: 'test'
+  ...
+# Subtest: session verification exceptions fail closed and disposal ignores pending responses
+ok 30 - session verification exceptions fail closed and disposal ignores pending responses
+  ---
+  duration_ms: 0.173497
+  type: 'test'
+  ...
+# Subtest: back/focus suspension hides data and late checks cannot restore an obsolete identity
+ok 31 - back/focus suspension hides data and late checks cannot restore an obsolete identity
+  ---
+  duration_ms: 0.109901
+  type: 'test'
+  ...
+# Subtest: SIGNED_IN schedules verification outside callback and cleanup cancels it
+ok 32 - SIGNED_IN schedules verification outside callback and cleanup cancels it
+  ---
+  duration_ms: 21.809114
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 554.507904

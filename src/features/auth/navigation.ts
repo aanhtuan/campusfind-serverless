@@ -1,6 +1,6 @@
 const FALLBACK = "/dashboard";
 const BASE = "https://campusfind.invalid";
-const protectedRoots = ["/dashboard", "/items/new", "/my-reports", "/my-claims"];
+const protectedRoots = ["/dashboard", "/items/new", "/my-reports", "/my-claims", "/claims", "/incoming-claims", "/admin"];
 
 export function isProtectedPath(pathname: string): boolean {
   return protectedRoots.some(root => pathname === root || pathname.startsWith(`${root}/`));

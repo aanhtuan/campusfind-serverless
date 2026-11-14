@@ -1,0 +1,63 @@
+{
+  "baseline": "ba8352d6b51ffb359c2f026fa3166ebef2ce2ef4",
+  "npm_ci": {
+    "exit_code": 0
+  },
+  "checks": [
+    {
+      "check": "lint",
+      "exit_code": 0
+    },
+    {
+      "check": "reports",
+      "exit_code": 0
+    },
+    {
+      "check": "auth",
+      "exit_code": 0
+    },
+    {
+      "check": "config",
+      "exit_code": 0
+    },
+    {
+      "check": "build",
+      "exit_code": 0
+    },
+    {
+      "check": "production-audit",
+      "exit_code": 0,
+      "findings": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "check": "full-audit",
+      "exit_code": 1,
+      "findings": {
+        "info": 0,
+        "low": 0,
+        "moderate": 16,
+        "high": 0,
+        "critical": 0,
+        "total": 16
+      }
+    },
+    {
+      "check": "typecheck",
+      "exit_code": 0
+    }
+  ],
+  "hosted_reporting": "NOT RUN — user declined Cloud fixtures",
+  "production_http": {
+    "exit_code": 0,
+    "existing_checks": 13,
+    "reporting_route_checks": 3,
+    "diagnostics_status": 404
+  }
+}

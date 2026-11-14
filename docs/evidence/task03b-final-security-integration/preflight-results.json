@@ -1,0 +1,47 @@
+[
+  {
+    "check": "npm-ci",
+    "exit_code": 0
+  },
+  {
+    "check": "versions",
+    "exit_code": 0
+  },
+  {
+    "check": "lint",
+    "exit_code": 0
+  },
+  {
+    "check": "auth-tests",
+    "exit_code": 0
+  },
+  {
+    "check": "config-tests",
+    "exit_code": 0
+  },
+  {
+    "check": "build",
+    "exit_code": 0
+  },
+  {
+    "check": "typecheck",
+    "exit_code": 0
+  },
+  {
+    "check": "audit-production",
+    "exit_code": 0
+  },
+  {
+    "check": "audit-full",
+    "exit_code": 1
+  },
+  {
+    "check": "diff-check",
+    "exit_code": 0
+  },
+  {
+    "check": "production-http-ci-step",
+    "exit_code": 0,
+    "adaptation": "port 3400 instead of occupied port 3100; fixture origin matches build"
+  }
+]

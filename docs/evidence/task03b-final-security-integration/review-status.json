@@ -1,0 +1,14 @@
+{
+  "recommendation": "BLOCKED",
+  "combined_local_preflight": "PASS",
+  "actual_git_integration": "NOT RUN; security patch not published or merged",
+  "production_audit_findings": 0,
+  "full_audit_moderate_development_findings": 16,
+  "historical_hosted_rls_requirements_passed": 10,
+  "human_password_rotation": "NOT CONFIRMED; human reports not changed / cannot confirm",
+  "github_ci_execution": "NOT RUN",
+  "natural_expiration_and_unexecuted_email_edges": "NOT RUN",
+  "credentials_or_env_files_copied": false,
+  "real_indexes_staged": false,
+  "commits_pushes_prs_merges": false
+}

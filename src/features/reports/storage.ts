@@ -43,3 +43,22 @@ export async function photoOperations(client: SupabaseClient, itemId: string, ex
     },
   };
 }
+
+// Bounded owner-only reconciliation survives a lost browser tab. List old staged
+// objects, then recheck registration immediately before each exact-path cleanup.
+// Never enumerate another report or remove registered images automatically.
+export async function stagedUploads(client: SupabaseClient, itemId: string, expectedOwner: string, now = Date.now()) {
+  const owner = await verifiedReporter(client);
+  if (owner !== expectedOwner || !await ownReport(client, owner, itemId)) throw new Error("This report is unavailable in your account.");
+  const { data: objects, error } = await client.storage.from(PHOTO_BUCKET).list(`${owner}/${itemId}`, { limit: 100, sortBy: { column: "created_at", order: "asc" } });
+  if (error) throw new Error("Staged uploads could not be checked.");
+  const { data: registered, error: metadataError } = await client.from("item_images").select("storage_path").eq("item_id", itemId);
+  if (metadataError) throw new Error("Photo registration could not be checked.");
+  const paths = new Set((registered ?? []).map(photo => photo.storage_path));
+  return (objects ?? []).flatMap(object => {
+    const match = /^([0-9a-f-]+)\.(jpg|jpeg|png|webp)$/.exec(object.name);
+    if (!match || !reportId.safeParse(match[1]).success || !object.created_at || !Number.isFinite(Date.parse(object.created_at)) || Date.parse(object.created_at) > now - 86400000) return [];
+    const path = photoPath(owner, itemId, match[1], match[2]);
+    return paths.has(path) ? [] : [path];
+  });
+}

@@ -1,0 +1,48 @@
+
+> campusfind-serverless@0.1.0 test:supabase-config
+> node --experimental-strip-types --test tests/supabase-config.test.mjs
+
+TAP version 13
+# (node:1572109) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/atuna/.codex/worktrees/7fb9/campusfind-serverless/src/lib/supabase/config.ts is not specified and it doesn't parse as CommonJS.
+# Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+# To eliminate this warning, add "type": "module" to /home/atuna/.codex/worktrees/7fb9/campusfind-serverless/package.json.
+# (Use `node-22 --trace-warnings ...` to show where the warning was created)
+# Subtest: missing configuration fails without leaking values
+ok 1 - missing configuration fails without leaking values
+  ---
+  duration_ms: 1.461934
+  type: 'test'
+  ...
+# Subtest: public configuration accepts cloud HTTPS and local HTTP
+ok 2 - public configuration accepts cloud HTTPS and local HTTP
+  ---
+  duration_ms: 0.33838
+  type: 'test'
+  ...
+# Subtest: invalid, insecure and credential-bearing origins fail
+ok 3 - invalid, insecure and credential-bearing origins fail
+  ---
+  duration_ms: 0.281632
+  type: 'test'
+  ...
+# Subtest: secret, legacy JWT and placeholder keys are rejected without echoing keys
+ok 4 - secret, legacy JWT and placeholder keys are rejected without echoing keys
+  ---
+  duration_ms: 0.196881
+  type: 'test'
+  ...
+# Subtest: connectivity command rejects missing configuration before HTTP
+ok 5 - connectivity command rejects missing configuration before HTTP
+  ---
+  duration_ms: 160.697811
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 314.636832

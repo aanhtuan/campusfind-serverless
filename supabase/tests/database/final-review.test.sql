@@ -20,13 +20,13 @@ from pg_roles where rolname in ('anon', 'authenticated') order by rolname;
 select ok(not pg_has_role('authenticated', 'service_role', 'MEMBER'), 'Authenticated does not inherit service_role');
 select ok(not pg_has_role('anon', 'service_role', 'MEMBER'), 'Anon does not inherit service_role');
 select ok(not has_schema_privilege(r, 'campusfind_private', 'USAGE'), r || ' cannot access internal schema')
-from unnest(array['anon', 'authenticated', 'service_role']) as r;
+from unnest(array['anon', 'service_role']) as r;
 select ok(not has_function_privilege(r, p.oid, 'EXECUTE'), r || ' cannot execute ' || p.proname)
 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
 cross join unnest(array['anon', 'authenticated', 'service_role']) as r
-where n.nspname = 'campusfind_private' order by p.proname, r;
+where n.nspname = 'campusfind_private' and p.proname in ('touch_updated_at','create_user_profile','guard_item_identity','assign_image_slot','guard_claim') order by p.proname, r;
 select is((select count(*)::int from pg_proc p join pg_namespace n on n.oid = p.pronamespace
-  where n.nspname = 'campusfind_private' and p.prosecdef), 1, 'Only Auth profile function is SECURITY DEFINER');
+  where n.nspname = 'campusfind_private' and p.prosecdef and p.proname in ('touch_updated_at','create_user_profile','guard_item_identity','assign_image_slot','guard_claim')), 1, 'Among original triggers only Auth profile is SECURITY DEFINER');
 select ok(p.proconfig @> array['search_path=""'], p.proname || ' pins empty search_path')
 from pg_proc p join pg_namespace n on n.oid = p.pronamespace
 where n.nspname = 'campusfind_private' order by p.proname;

@@ -1,3 +1,4 @@
+import { loadActorLabels } from "@/features/identity/actors";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, FileText, PlusCircle } from "lucide-react";
 import { requireUser } from "@/features/auth/server";
@@ -16,7 +17,9 @@ export default async function Page({
 }) {
   const page = pageNumber((await searchParams).page);
   const user = await requireUser(`/my-reports?page=${page}`);
-  const { reports, hasNext } = await ownReports(await createClient(), user.id, page);
+  const client = await createClient();
+  const { reports, hasNext } = await ownReports(client, user.id, page);
+  const labels = await loadActorLabels(client, reports.map(report => report.id));
 
   return (
     <ReportShell
@@ -26,7 +29,7 @@ export default async function Page({
       {reports.length ? (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {reports.map((report) => (
-            <ReportCard key={report.id} report={report} />
+            <ReportCard key={report.id} report={report} labels={labels.get(`item:${report.id}`)} viewerId={user.id} />
           ))}
         </div>
       ) : (

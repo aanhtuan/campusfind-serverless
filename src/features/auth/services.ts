@@ -14,13 +14,13 @@ export function createAuthService(client: SupabaseClient) {
     return url.toString();
   }
   return {
-    async signUp({ email, password, displayName }: Credentials & { displayName?: string }, returnTo?: string): Promise<Result> {
+    async signUp({ email, password, displayName }: Credentials & { displayName?: string }, returnTo?: string): Promise<Result & { authenticated?: boolean }> {
       try {
         // Accept only a validated name hint; role and identity remain database-owned.
         const name = displayNameSchema.safeParse(displayName);
         if (displayName !== undefined && !name.success) return { ok: false, error: "Enter a valid display name." };
-        const { error } = await client.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: confirmationUrl(returnTo), ...(name.success ? { data: { display_name: name.data } } : {}) } });
-        return error ? { ok: false, error: "Unable to create account. Please try again." } : { ok: true };
+        const { data, error } = await client.auth.signUp({ email: email.trim(), password, options: { emailRedirectTo: confirmationUrl(returnTo), ...(name.success ? { data: { display_name: name.data } } : {}) } });
+        return error ? { ok: false, error: "Unable to create account. Please try again." } : { ok: true, authenticated: Boolean(data?.session) };
       } catch { return { ok: false, error: "Unable to create account. Please try again." }; }
     },
     async signInWithPassword({ email, password }: Credentials): Promise<Result> {

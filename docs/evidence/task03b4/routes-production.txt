@@ -1,0 +1,18 @@
+
+> campusfind-serverless@0.1.0 test:auth-routes
+> node tests/auth-routes-smoke.mjs http://localhost:3100
+
+PASS: anonymous local /dashboard protected
+PASS: anonymous local /items/new protected
+PASS: anonymous local /my-reports protected
+PASS: anonymous local /my-claims protected
+PASS: anonymous local /dashboard/settings protected
+PASS: local / accessible
+PASS: local /login accessible
+PASS: /items is not auth-redirected (browsing UI remains unimplemented)
+PASS: malformed local callback rejected without credentials in redirect
+PASS: malformed local callback rejected without credentials in redirect
+PASS: /login renders anonymous UI with safe links and no-store cache headers
+PASS: /register renders anonymous UI with safe links and no-store cache headers
+PASS: /verify-email renders anonymous UI with safe links and no-store cache headers
+NOT RUN: hosted Auth/session/email HTTP flows; these localhost GET requests have no Auth session

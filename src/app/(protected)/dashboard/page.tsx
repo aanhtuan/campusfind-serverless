@@ -3,9 +3,11 @@ import {
   ArrowRight,
   FileText,
   HeartHandshake,
+  Inbox,
   Mail,
   PlusCircle,
   Search,
+  Send,
   ShieldCheck,
   Sparkles,
   User
@@ -192,16 +194,22 @@ export default async function Page() {
                 <HeartHandshake className="size-6" />
               </div>
               <h3 className="mt-4 text-lg font-bold text-foreground">
-                Quy trình &amp; Yêu cầu nhận lại
+                Quản lý yêu cầu & phản hồi
               </h3>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                Xem hướng dẫn xác nhận quyền sở hữu an toàn và các điểm tiếp nhận chính thức trong khuôn viên trường.
+                Theo dõi yêu cầu nhận đồ hoặc phản hồi nhặt được, xác minh chủ đồ và cùng xác nhận bàn giao.
               </p>
-              <div className="mt-6">
-                <Button asChild variant="outline" className="w-full sm:w-auto group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary">
-                  <Link href="/my-claims" className="gap-2">
-                    <span>Xem hướng dẫn nhận đồ</span>
-                    <ArrowRight className="size-4" />
+              <div className="mt-6 flex flex-wrap gap-2.5">
+                <Button asChild variant="outline" className="flex-1 min-w-[140px] justify-center group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary">
+                  <Link href="/incoming-claims" className="gap-1.5">
+                    <Inbox className="size-4" />
+                    <span>Phản hồi gửi đến</span>
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="flex-1 min-w-[140px] justify-center hover:bg-secondary">
+                  <Link href="/my-claims" className="gap-1.5">
+                    <Send className="size-4" />
+                    <span>Yêu cầu của tôi</span>
                   </Link>
                 </Button>
               </div>

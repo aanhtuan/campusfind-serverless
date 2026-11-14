@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { MAX_PHOTOS, photoExtension, photoPath } from "./validation";
-import { PHOTO_BUCKET, photoOperations } from "./storage";
+import { PHOTO_BUCKET, photoOperations, stagedUploads } from "./storage";
 import { reconcileUpload, removePhoto, uploadPhoto, type PendingPhoto, type PhotoOperations } from "./photo-lifecycle";
 import type { ItemPhoto } from "./types";
 
@@ -122,7 +122,7 @@ export function PhotoManager({ itemId, ownerId, photos }: { itemId: string; owne
 
       {pending.length > 0 && (
         <div role="alert" className="mt-5 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-amber-950 text-xs">
-          <p className="font-semibold">Hoàn tất các tác vụ đang chờ trước khi rời khỏi trang này:</p>
+          <p className="font-semibold">Xác nhận các tác vụ này trước khi thêm ảnh. Nếu phiên trước bị gián đoạn, bạn có thể tìm lại các tệp tải lên chưa hoàn tất.</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {pending.map((operation, index) => (
               <Button
@@ -173,6 +173,14 @@ export function PhotoManager({ itemId, ownerId, photos }: { itemId: string; owne
         </div>
       )}
 
+      <div className="mt-6 border-t border-border/60 pt-5">
+        <Button type="button" variant="outline" disabled={busy || pending.length > 0} onClick={() => void run(async () => {
+          const paths = await stagedUploads(createClient(), itemId, ownerId);
+          setPending(paths.map(path => ({ path, kind: "upload-cleanup" as const })));
+          setMessage(paths.length ? "Đã tìm thấy tệp tải lên cũ chưa được đăng ký. Xác nhận từng tệp ở trên để hoàn tất xử lý." : "Không tìm thấy tệp tải lên cũ chưa hoàn tất trong 100 tệp đầu tiên.");
+        })}>Tìm ảnh tải lên chưa hoàn tất</Button>
+        <p className="mt-2 text-xs text-muted-foreground">Kiểm tra tối đa 100 tệp cũ nhất của tin báo, được tải lên ít nhất 24 giờ trước. Ảnh đã đăng ký sẽ được giữ lại; hãy hoàn tất tải ảnh ở các tab khác trước khi xử lý.</p>
+      </div>
       {message && (
         <p role="status" aria-live="polite" className="mt-4 text-xs font-semibold text-primary">
           {message}

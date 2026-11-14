@@ -1,0 +1,5 @@
+campusfind-serverless@0.1.0 /home/atuna/.codex/worktrees/nextjs-security/campusfind-serverless
+├── @next/env@16.4.3
+├── eslint-config-next@16.4.3
+└─┬ next@16.4.3
+  └── @next/env@16.4.3 deduped

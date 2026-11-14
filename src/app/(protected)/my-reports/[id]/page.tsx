@@ -1,5 +1,8 @@
+import { loadActorLabels } from "@/features/identity/actors";
+import { ReportActors } from "@/features/identity/actor-summary";
 import Link from "next/link";
 import { ArrowLeft, Calendar, Edit3, MapPin, Tag } from "lucide-react";
+import { WorkflowButton } from "@/features/workflow/controls";
 import { Button } from "@/components/ui/button";
 import { requireOwnedReport } from "@/features/reports/queries";
 import { ReportShell } from "@/features/reports/report-ui";
@@ -20,7 +23,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   if (error) throw new Error("Unable to load report photos.");
 
+  const labels = (await loadActorLabels(client, [id])).get(`item:${id}`);
   const isLost = report.type === "LOST";
+  const selected = isLost && report.status === "OPEN" ? await client.from("claims").select("id").eq("item_id", report.id).eq("status", "APPROVED").maybeSingle() : null;
+  if (selected?.error) throw new Error("Unable to load response status.");
 
   return (
     <ReportShell
@@ -51,6 +57,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:text-3xl [overflow-wrap:anywhere]">
           {report.title}
         </h2>
+
+        <ReportActors item={report} labels={labels} viewerId={user.id} />
 
         {/* Meta Grid */}
         <dl className="mt-6 grid gap-4 rounded-2xl bg-secondary/40 p-4 sm:grid-cols-3 sm:p-5">
@@ -99,6 +107,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <span>Chỉnh sửa thông tin tin báo</span>
             </Link>
           </Button>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Button asChild variant="outline"><Link href="/incoming-claims">{isLost ? "Xem phản hồi nhặt được & Theo dõi bàn giao" : "Xét duyệt yêu cầu & Theo dõi bàn giao"}</Link></Button>
+          {isLost && report.status === "OPEN" && !selected?.data && <WorkflowButton request={{ action: "resolve_lost", data: { item_id: report.id } }}>Tôi đã tìm lại được đồ</WorkflowButton>}
+          {report.status === "RESOLVED" && <WorkflowButton request={{ action: "close_report", data: { item_id: report.id } }}>Đóng tin đã hoàn tất</WorkflowButton>}
         </div>
       </article>
 

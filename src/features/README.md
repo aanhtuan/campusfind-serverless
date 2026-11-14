@@ -1,5 +1,5 @@
 # Features
 
-Future domain modules live here: `auth`, `items`, and `claims`.
-Keep module-specific components, validation, and data access together.
-Only introduce these modules when their implementation task starts; Task 01 has no business logic.
+Domain modules are `auth`, `reports`, `discovery` and `workflow`. Keep module-specific components, validation, data access and types together. Shared Supabase clients stay in `src/lib/supabase`; authenticated workflow input validation is shared with the Deno Edge Function under `supabase/functions/_shared`.
+
+See `docs/mvp-workflow.md` for private data boundaries, atomic transitions and deployment requirements.

@@ -1,5 +1,8 @@
+import { loadActorLabels } from "@/features/identity/actors";
+import { ReportActors } from "@/features/identity/actor-summary";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { ClaimEntry } from "@/features/workflow/claim-entry";
 import { notFound } from "next/navigation";
 import { reportId } from "@/features/reports/validation";
 import { DiscoveryShell, DiscoveryDetails } from "@/features/discovery/discovery-ui";
@@ -12,9 +15,10 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   if (!reportId.safeParse(id).success) notFound();
-  const { client, authenticated } = await discoveryContext();
+  const { client, authenticated, userId } = await discoveryContext();
   const item = await discoveryItem(client, id);
   if (!item) notFound();
+  const labels = userId ? (await loadActorLabels(client, [id])).get(`item:${id}`) : undefined;
 
   return (
     <DiscoveryShell authenticated={authenticated}>
@@ -28,6 +32,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </Link>
       </div>
       <DiscoveryDetails item={item} />
+      <ReportActors item={item} labels={labels} viewerId={userId ?? undefined} />
+      <ClaimEntry client={client} item={item} userId={userId} />
       <DiscoveryPhotos itemId={item.id} />
     </DiscoveryShell>
   );

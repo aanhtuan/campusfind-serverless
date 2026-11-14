@@ -1,0 +1,1 @@
+Initial extra dev-origin check was interrupted by environment EMFILE watcher exhaustion. No application assertion completed. Production build/HTTP checks had already passed. Retried with process-local Watchpack polling; no system settings or live test sessions changed.

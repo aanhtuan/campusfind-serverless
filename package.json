@@ -14,7 +14,13 @@
     "test:reports": "node --test tests/reports.test.mjs",
     "test:search": "node --test tests/search.test.mjs",
     "test:auth-routes": "node tests/auth-routes-smoke.mjs",
-    "test:auth-public-cloud": "node --experimental-strip-types tests/auth-public-cloud.mjs"
+    "test:auth-public-cloud": "node --experimental-strip-types tests/auth-public-cloud.mjs",
+    "test:claims": "node --test tests/workflow.test.mjs",
+    "test:handover": "node --test tests/workflow.test.mjs",
+    "test:workflow:local": "node scripts/test-mvp-local.mjs --confirm-disposable-local",
+    "test:workflow:browser": "node scripts/test-mvp-browser.mjs --confirm-disposable-local",
+    "test:identity": "node --test tests/identity.test.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
   },
   "dependencies": {
     "@next/env": "16.4.3",
@@ -38,6 +44,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "playwright": "1.61.0",
     "postcss": "^8.5.29",
     "supabase": "2.120.0",
     "tailwindcss": "^4",

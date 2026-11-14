@@ -1,0 +1,77 @@
+{
+  "npm ci": {
+    "status": "PASS",
+    "exit_code": 0
+  },
+  "lint": {
+    "status": "PASS",
+    "exit_code": 0
+  },
+  "auth tests": {
+    "status": "PASS",
+    "tests": 32
+  },
+  "config tests": {
+    "status": "PASS",
+    "tests": 5
+  },
+  "typecheck": {
+    "status": "PASS",
+    "exit_code": 0
+  },
+  "production build": {
+    "status": "FAIL",
+    "exit_code": 1,
+    "reason": "Next 16.4.0 security guard after successful compilation"
+  },
+  "production audit": {
+    "status": "FAIL",
+    "findings": 1,
+    "critical": 1
+  },
+  "full audit": {
+    "status": "FAIL",
+    "findings": 17,
+    "moderate": 16,
+    "critical": 1
+  },
+  "development HTTP": {
+    "status": "PASS",
+    "checks": 13,
+    "extra_checks": [
+      "pre-hydration POST/disabled inputs",
+      "synthetic expired-session rejection/cookie deletion"
+    ]
+  },
+  "production HTTP": {
+    "status": "PASS",
+    "checks": 13,
+    "extra_checks": [
+      "pre-hydration POST/disabled inputs",
+      "diagnostics HTTP 404"
+    ]
+  },
+  "cross-user RLS": {
+    "status": "PASS",
+    "directions": [
+      "A to B",
+      "B to A"
+    ],
+    "profile_snapshots_unchanged": true
+  },
+  "GitHub CI run": {
+    "status": "NOT RUN",
+    "reason": "No Git publishing approved"
+  },
+  "natural expiration/concurrent expired refresh": {
+    "status": "NOT RUN"
+  },
+  "human password rotation": {
+    "status": "NOT CONFIRMED"
+  },
+  "credential handling": {
+    "status": "FAIL observed, targeted fix verified",
+    "remaining": "Human password rotation not confirmed; historical URL/tool-log exposure cannot be claimed erased",
+    "scope": "Review artifacts contain no exposed credential values"
+  }
+}

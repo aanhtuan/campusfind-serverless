@@ -1,0 +1,7 @@
+PASS: Remote getUser confirms normal identity distinct from known B.
+PASS: Own USER profile read.
+PASS: SELECT of B returned zero rows without provider/network errors.
+PASS: PATCH of exact existing peer name returned zero rows.
+PASS: role/id/created_at/updated_at impossible-row probes each reject with 42501.
+PASS: Own A snapshot unchanged.
+PASS: Human login succeeded on 127.0.0.1 after dev-origin/hydration safety fix.

@@ -1,0 +1,74 @@
+# Current integration changed-file manifest
+
+Base `768365c`, branch `feat/integrate-campusfind-mvp`; changes remain unstaged and uncommitted. Includes the LOST workflow and the approved November 9 hosted demo. Generated images/screenshots, credentials, environment files and caches are outside Git.
+
+- `.gitignore`
+- `README.md`
+- `docs/database-design.md`
+- `docs/hosted-demo-verification.md`
+- `docs/lost-finder-workflow.md`
+- `docs/mvp-audit.md`
+- `docs/mvp-completion.md`
+- `docs/mvp-deployment.md`
+- `docs/mvp-files.md`
+- `docs/mvp-integration.md`
+- `docs/mvp-workflow.md`
+- `docs/project-scope.md`
+- `docs/rls-security.md`
+- `package-lock.json`
+- `package.json`
+- `scripts/prepare-mvp-local.mjs`
+- `scripts/test-database-local.py`
+- `scripts/test-mvp-browser.mjs`
+- `scripts/test-mvp-local.mjs`
+- `src/app/(protected)/admin/loading.tsx`
+- `src/app/(protected)/admin/page.tsx`
+- `src/app/(protected)/claims/[id]/page.tsx`
+- `src/app/(protected)/claims/loading.tsx`
+- `src/app/(protected)/claims/new/page.tsx`
+- `src/app/(protected)/dashboard/page.tsx`
+- `src/app/(protected)/error.tsx`
+- `src/app/(protected)/incoming-claims/loading.tsx`
+- `src/app/(protected)/incoming-claims/page.tsx`
+- `src/app/(protected)/my-claims/loading.tsx`
+- `src/app/(protected)/my-claims/page.tsx`
+- `src/app/(protected)/my-reports/[id]/page.tsx`
+- `src/app/(protected)/not-found.tsx`
+- `src/app/items/[id]/page.tsx`
+- `src/components/layout/campus-footer.tsx`
+- `src/components/layout/campus-header.tsx`
+- `src/components/ui/badge.tsx`
+- `src/features/README.md`
+- `src/features/auth/navigation.ts`
+- `src/features/discovery/discovery-ui.tsx`
+- `src/features/discovery/queries.ts`
+- `src/features/reports/photo-manager.tsx`
+- `src/features/reports/storage.ts`
+- `src/features/workflow/claim-entry.tsx`
+- `src/features/workflow/claim-form.tsx`
+- `src/features/workflow/claim-list.tsx`
+- `src/features/workflow/controls.tsx`
+- `src/features/workflow/coordination.tsx`
+- `src/features/workflow/labels.ts`
+- `src/features/workflow/owner-verification.tsx`
+- `src/features/workflow/participants.ts`
+- `src/features/workflow/services.ts`
+- `src/features/workflow/types.ts`
+- `src/proxy.ts`
+- `src/types/README.md`
+- `supabase/config.toml`
+- `supabase/functions/_shared/validation.ts`
+- `supabase/functions/workflow/index.ts`
+- `supabase/migrations/20261105065313_claims_handover_workflow.sql`
+- `supabase/migrations/20261109154529_lost_finder_response.sql`
+- `supabase/tests/concurrency.py`
+- `supabase/tests/database/final-review.test.sql`
+- `supabase/tests/database/lost-response.test.sql`
+- `supabase/tests/database/security.test.sql`
+- `supabase/tests/database/workflow.test.sql`
+- `supabase/tests/workflow-concurrency.py`
+- `tests/reports.test.mjs`
+- `tests/workflow.test.mjs`
+- `tsconfig.json`
+
+Additive migrations: `20261105065313_claims_handover_workflow.sql`, `20261109154529_lost_finder_response.sql`. Both now applied to the approved development Cloud project. Existing migration source files are unchanged. Edge Function `workflow` is deployed with JWT verification; shared validation is bundled. Current live evidence and limits: [hosted demo report](hosted-demo-verification.md).
